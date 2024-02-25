@@ -40,15 +40,26 @@ func (i *IpManager) getAddresses(c *gin.Context) {
 	}
 }
 
+func (i *IpManager) getAddressByHostName(c *gin.Context) {
+	hostName := c.Param("hostname")
+	ent, err := model.GetAddressByHostName(hostName)
+	checkError(err)
+
+	if ent.Address == "" {
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": "no records found for " + hostName})
+	} else {
+		c.IndentedJSON(http.StatusOK, ent)
+	}
+}
+
 /*
+func (i *IpManager) getAddressByHostNameId(c *gin.Context)
+func (i *IpManager) getAddressById(c *gin.Context)
+func (i *IpManager) getAddressByIpAddress(c *gin.Context)
 func (i *IpManager) getAddressesByDomainId(c *gin.Context)
 func (i *IpManager) getAddressesByDomainName(c *gin.Context)
 func (i *IpManager) getAddressesBySubnetId(c *gin.Context)
 func (i *IpManager) getAddressesBySubnetName(c *gin.Context)
-func (i *IpManager) getAddressByHostName(c *gin.Context)
-func (i *IpManager) getAddressByHostNameId(c *gin.Context)
-func (i *IpManager) getAddressById(c *gin.Context)
-func (i *IpManager) getAddressByIpAddress(c *gin.Context)
 */
 
 func (i *IpManager) getDomains(c *gin.Context) {
@@ -143,6 +154,7 @@ func main() {
 	// API
 	router := r.Group("/api/v1")
 	{
+		router.GET("/address/:hostname", IpManager.getAddressByHostName)
 		router.GET("/addresses", IpManager.getAddresses)
 		router.GET("/domains", IpManager.getDomains)
 		router.GET("/hosts", IpManager.getHosts)

@@ -40,6 +40,17 @@ func (i *IpManager) getAddresses(c *gin.Context) {
 	}
 }
 
+/*
+func (i *IpManager) getAddressesByDomainId(c *gin.Context)
+func (i *IpManager) getAddressesByDomainName(c *gin.Context)
+func (i *IpManager) getAddressesBySubnetId(c *gin.Context)
+func (i *IpManager) getAddressesBySubnetName(c *gin.Context)
+func (i *IpManager) getAddressByHostName(c *gin.Context)
+func (i *IpManager) getAddressByHostNameId(c *gin.Context)
+func (i *IpManager) getAddressById(c *gin.Context)
+func (i *IpManager) getAddressByIpAddress(c *gin.Context)
+*/
+
 func (i *IpManager) getDomains(c *gin.Context) {
 	domains, err := model.GetDomains()
 	checkError(err)
@@ -50,6 +61,11 @@ func (i *IpManager) getDomains(c *gin.Context) {
 		c.IndentedJSON(http.StatusOK, gin.H{"data": domains})
 	}
 }
+
+/*
+func (i *IpManager) getDomainById(c *gin.Context)
+func (i *IpManager) getDomainByDomainName(c *gin.Context)
+*/
 
 func (i *IpManager) getHosts(c *gin.Context) {
 	hosts, err := model.GetHosts()
@@ -62,6 +78,9 @@ func (i *IpManager) getHosts(c *gin.Context) {
 	}
 }
 
+// func (i *IpManager) getHostByHostName(c *gin.Context)
+// func (i *IpManager) getHostById(c *gin.Context)
+
 func (i *IpManager) getSubnets(c *gin.Context) {
 	snets, err := model.GetSubnets()
 	checkError(err)
@@ -73,6 +92,13 @@ func (i *IpManager) getSubnets(c *gin.Context) {
 	}
 }
 
+/*
+func (i *IpManager) GetSubnetById(c *gin.Context)
+func (i *IpManager) GetSubnetByNetworkName(c *gin.Context)
+func (i *IpManager) GetSubnestByDomainId(c *gin.Context)
+func (i *IpManager) GetSubnestByDomainName(c *gin.Context)
+*/
+
 func (i *IpManager) getUsers(c *gin.Context) {
 	users, err := model.GetUsers()
 	checkError(err)
@@ -83,6 +109,9 @@ func (i *IpManager) getUsers(c *gin.Context) {
 		c.IndentedJSON(http.StatusOK, gin.H{"data": users})
 	}
 }
+
+//func (i *IpManager) GetUserById(c *gin.Context)
+//func (i *IpManager) GetUserByUserName(c *gin.Context)
 
 func main() {
 	r := gin.Default()

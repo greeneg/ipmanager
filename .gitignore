@@ -20,4 +20,9 @@
 # Go workspace file
 go.work
 
+# don't add our executable
+ipmanager
+
+# don't add data stuff
+config/config.json
 *.db

@@ -6,13 +6,14 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/greeneg/ipmanager/model"
 )
 
 type Config struct {
-	TcpPort string `json:"tcpPort"`
+	TcpPort int    `json:"tcpPort"`
 	DbPath  string `json:"dbPath"`
 }
 
@@ -120,5 +121,6 @@ func main() {
 		router.GET("/users", IpManager.getUsers)
 	}
 
-	r.Run(IpManager.confStruct.TcpPort)
+	tcpPort := strconv.Itoa(IpManager.confStruct.TcpPort)
+	r.Run(":" + tcpPort)
 }

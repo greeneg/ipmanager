@@ -8,50 +8,6 @@ import (
 
 var DB *sql.DB
 
-type Address struct {
-	Id           int    `json:"Id"`
-	Address      string `json:"Address"`
-	HostNameId   int    `json:"HostNameId"`
-	DomainId     int    `json:"DomainId"`
-	SubnetId     int    `json:"SubnetId"`
-	CreatorId    int    `json:"CreatorId"`
-	CreationDate string `json:"CreationDate"`
-}
-
-type Domain struct {
-	Id           int    `json:"Id"`
-	DomainName   string `json:"DomainName"`
-	CreatorId    int    `json:"CreatorId"`
-	CreationDate string `json:"CreationDate"`
-}
-
-type Host struct {
-	Id           int    `json:"Id"`
-	HostName     string `json:"HostName"`
-	CreatorId    int    `json:"CreatorId"`
-	CreationDate string `json:"CreationDate"`
-}
-
-type Subnet struct {
-	Id                         int    `json:"Id"`
-	NetworkName                string `json:"NetworkName"`
-	AddressStart               string `json:"AddressStart"`
-	AddressEnd                 string `json:"AddressEnd"`
-	BitMask                    int    `json:"BitMask"`
-	GatewayAddress             string `json:"GatewayAddress"`
-	NumberOfAvailableAddresses int    `json:"NumberOfAvailableAddresses"`
-	DomainId                   int    `json:"DomainId"`
-	CreatorId                  int    `json:"CreatorId"`
-	CreationDate               string `json:"CreationDate"`
-}
-
-type User struct {
-	Id           int    `json:"Id"`
-	UserName     string `json:"UserName"`
-	PasswordHash string `json:"PasswordHash"`
-	CreationDate string `json:"CreationDate"`
-}
-
 func ConnectDatabase(dbPath string) error {
 	db, err := sql.Open("sqlite3", dbPath)
 	if err != nil {
@@ -343,20 +299,22 @@ func GetAddresses() ([]Address, error) {
 }
 
 func GetDomainById(id int) (Domain, error) {
-	rows, err := DB.Query("SELECT * FROM Domains WHERE Id = ?", id)
+	rec, err := DB.Prepare("SELECT * FROM Domains WHERE Id = ?")
 	if err != nil {
 		return Domain{}, err
 	}
-	defer rows.Close()
 
 	domain := Domain{}
-	err = rows.Scan(
+	err = rec.QueryRow(id).Scan(
 		&domain.Id,
 		&domain.DomainName,
 		&domain.CreatorId,
 		&domain.CreationDate,
 	)
 	if err != nil {
+		if err == sql.ErrNoRows {
+			return Domain{}, nil
+		}
 		return Domain{}, err
 	}
 
@@ -364,20 +322,22 @@ func GetDomainById(id int) (Domain, error) {
 }
 
 func GetDomainByDomainName(domainname string) (Domain, error) {
-	rows, err := DB.Query("SELECT * FROM Domains WHERE DomainName = ?", domainname)
+	rec, err := DB.Prepare("SELECT * FROM Domains WHERE DomainName = ?")
 	if err != nil {
 		return Domain{}, err
 	}
-	defer rows.Close()
 
 	domain := Domain{}
-	err = rows.Scan(
+	err = rec.QueryRow(domainname).Scan(
 		&domain.Id,
 		&domain.DomainName,
 		&domain.CreatorId,
 		&domain.CreationDate,
 	)
 	if err != nil {
+		if err == sql.ErrNoRows {
+			return Domain{}, nil
+		}
 		return Domain{}, err
 	}
 
@@ -410,20 +370,22 @@ func GetDomains() ([]Domain, error) {
 }
 
 func GetHostById(id int) (Host, error) {
-	rows, err := DB.Query("SELECT * FROM Hosts WHERE Id = ?", id)
+	rec, err := DB.Prepare("SELECT * FROM Hosts WHERE Id = ?")
 	if err != nil {
 		return Host{}, err
 	}
-	defer rows.Close()
 
 	host := Host{}
-	err = rows.Scan(
+	err = rec.QueryRow(id).Scan(
 		&host.Id,
 		&host.HostName,
 		&host.CreatorId,
 		&host.CreationDate,
 	)
 	if err != nil {
+		if err == sql.ErrNoRows {
+			return Host{}, nil
+		}
 		return Host{}, err
 	}
 
@@ -431,20 +393,22 @@ func GetHostById(id int) (Host, error) {
 }
 
 func GetHostByHostName(hostname string) (Host, error) {
-	rows, err := DB.Query("SELECT * FROM Hosts WHERE HostName = ?", hostname)
+	rec, err := DB.Prepare("SELECT * FROM Hosts WHERE HostName = ?")
 	if err != nil {
 		return Host{}, err
 	}
-	defer rows.Close()
 
 	host := Host{}
-	err = rows.Scan(
+	err = rec.QueryRow(hostname).Scan(
 		&host.Id,
 		&host.HostName,
 		&host.CreatorId,
 		&host.CreationDate,
 	)
 	if err != nil {
+		if err == sql.ErrNoRows {
+			return Host{}, nil
+		}
 		return Host{}, err
 	}
 
@@ -477,26 +441,26 @@ func GetHosts() ([]Host, error) {
 }
 
 func GetSubnetById(id int) (Subnet, error) {
-	rows, err := DB.Query("SELECT * FROM Subnets WHERE Id = ?", id)
+	rec, err := DB.Prepare("SELECT * FROM Subnets WHERE Id = ?")
 	if err != nil {
 		return Subnet{}, err
 	}
-	defer rows.Close()
 
 	subnet := Subnet{}
-	err = rows.Scan(
+	err = rec.QueryRow(id).Scan(
 		&subnet.Id,
 		&subnet.NetworkName,
-		&subnet.AddressStart,
-		&subnet.AddressEnd,
+		&subnet.NetworkPrefix,
 		&subnet.BitMask,
 		&subnet.GatewayAddress,
-		&subnet.NumberOfAvailableAddresses,
 		&subnet.DomainId,
 		&subnet.CreatorId,
 		&subnet.CreationDate,
 	)
 	if err != nil {
+		if err == sql.ErrNoRows {
+			return Subnet{}, err
+		}
 		return Subnet{}, err
 	}
 
@@ -504,26 +468,26 @@ func GetSubnetById(id int) (Subnet, error) {
 }
 
 func GetSubnetByNetworkName(snetname string) (Subnet, error) {
-	rows, err := DB.Query("SELECT * FROM Subnets WHERE NetworkName = ?", snetname)
+	rec, err := DB.Prepare("SELECT * FROM Subnets WHERE NetworkName = ?")
 	if err != nil {
 		return Subnet{}, err
 	}
-	defer rows.Close()
 
 	subnet := Subnet{}
-	err = rows.Scan(
+	err = rec.QueryRow(snetname).Scan(
 		&subnet.Id,
 		&subnet.NetworkName,
-		&subnet.AddressStart,
-		&subnet.AddressEnd,
+		&subnet.NetworkPrefix,
 		&subnet.BitMask,
 		&subnet.GatewayAddress,
-		&subnet.NumberOfAvailableAddresses,
 		&subnet.DomainId,
 		&subnet.CreatorId,
 		&subnet.CreationDate,
 	)
 	if err != nil {
+		if err == sql.ErrNoRows {
+			return Subnet{}, err
+		}
 		return Subnet{}, err
 	}
 
@@ -543,11 +507,9 @@ func GetSubnestByDomainId(id int) ([]Subnet, error) {
 		err = rows.Scan(
 			&snet.Id,
 			&snet.NetworkName,
-			&snet.AddressStart,
-			&snet.AddressEnd,
+			&snet.NetworkPrefix,
 			&snet.BitMask,
 			&snet.GatewayAddress,
-			&snet.NumberOfAvailableAddresses,
 			&snet.DomainId,
 			&snet.CreatorId,
 			&snet.CreationDate,
@@ -586,11 +548,9 @@ func GetSubnestByDomainName(domainname string) ([]Subnet, error) {
 		err = rows.Scan(
 			&snet.Id,
 			&snet.NetworkName,
-			&snet.AddressStart,
-			&snet.AddressEnd,
+			&snet.NetworkPrefix,
 			&snet.BitMask,
 			&snet.GatewayAddress,
-			&snet.NumberOfAvailableAddresses,
 			&snet.DomainId,
 			&snet.CreatorId,
 			&snet.CreationDate,
@@ -617,11 +577,9 @@ func GetSubnets() ([]Subnet, error) {
 		err = rows.Scan(
 			&snet.Id,
 			&snet.NetworkName,
-			&snet.AddressStart,
-			&snet.AddressEnd,
+			&snet.NetworkPrefix,
 			&snet.BitMask,
 			&snet.GatewayAddress,
-			&snet.NumberOfAvailableAddresses,
 			&snet.DomainId,
 			&snet.CreatorId,
 			&snet.CreationDate,
@@ -636,20 +594,22 @@ func GetSubnets() ([]Subnet, error) {
 }
 
 func GetUserById(id int) (User, error) {
-	rows, err := DB.Query("SELECT * FROM Users WHERE Id = ?", id)
+	rec, err := DB.Prepare("SELECT * FROM Users WHERE Id = ?")
 	if err != nil {
 		return User{}, err
 	}
-	defer rows.Close()
 
 	user := User{}
-	err = rows.Scan(
+	err = rec.QueryRow(id).Scan(
 		&user.Id,
 		&user.UserName,
 		&user.PasswordHash,
 		&user.CreationDate,
 	)
 	if err != nil {
+		if err == sql.ErrNoRows {
+			return User{}, nil
+		}
 		return User{}, err
 	}
 
@@ -657,20 +617,22 @@ func GetUserById(id int) (User, error) {
 }
 
 func GetUserByUserName(username string) (User, error) {
-	rows, err := DB.Query("SELECT * FROM Users WHERE UserName = ?", username)
+	rec, err := DB.Prepare("SELECT * FROM Users WHERE UserName = ?")
 	if err != nil {
 		return User{}, err
 	}
-	defer rows.Close()
 
 	user := User{}
-	err = rows.Scan(
+	err = rec.QueryRow(username).Scan(
 		&user.Id,
 		&user.UserName,
 		&user.PasswordHash,
 		&user.CreationDate,
 	)
 	if err != nil {
+		if err == sql.ErrNoRows {
+			return User{}, nil
+		}
 		return User{}, err
 	}
 

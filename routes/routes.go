@@ -45,4 +45,5 @@ func PrivateRoutes(g *gin.RouterGroup, i *controllers.IpManager) {
 	// user related routes
 	g.POST("/user", i.CreateUser) // create new user
 	g.PUT("/user/:name")          // update a user password or to lock the account
+	g.DELETE("/user/:name", i.DeleteUser)
 }

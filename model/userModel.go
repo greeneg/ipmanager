@@ -77,6 +77,29 @@ func CreateUser(p ProposedUser) (bool, error) {
 	return true, nil
 }
 
+func DeleteUser(username string) (bool, error) {
+	t, err := DB.Begin()
+	if err != nil {
+		return false, err
+	}
+
+	q, err := DB.Prepare("DELETE FROM Users WHERE UserName IS ?")
+	if err != nil {
+		return false, err
+	}
+
+	defer q.Close()
+
+	_, err = q.Exec(username)
+	if err != nil {
+		return false, err
+	}
+
+	t.Commit()
+
+	return true, nil
+}
+
 func GetUsers() ([]User, error) {
 	rows, err := DB.Query("SELECT * FROM Users")
 	if err != nil {

@@ -9,6 +9,21 @@ import (
 	"github.com/greeneg/ipmanager/model"
 )
 
+func (i *IpManager) CreateUser(c *gin.Context) {
+	var json model.ProposedUser
+	if err := c.ShouldBindJSON(&json); err != nil {
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	s, err := model.CreateUser(json)
+	if s {
+		c.IndentedJSON(http.StatusOK, gin.H{"message": "User has been added to system"})
+	} else {
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	}
+}
+
 func (i *IpManager) GetUsers(c *gin.Context) {
 	users, err := model.GetUsers()
 	helpers.CheckError(err)

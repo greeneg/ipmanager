@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"encoding/base64"
+	"fmt"
 	"log"
 	"net/http"
 	"strings"
@@ -29,7 +30,7 @@ func AuthCheck(c *gin.Context) {
 	session := sessions.Default(c)
 	user := session.Get("user")
 	if user == nil {
-		log.Println("WARNING: No session found. Attempting to check for authentication headers")
+		log.Println("INFO: No session found. Attempting to check for authentication headers")
 		baHeader := c.GetHeader("Authorization")
 		if baHeader == "" {
 			log.Println("ERROR: No authentication header found. Aborting")
@@ -53,6 +54,10 @@ func AuthCheck(c *gin.Context) {
 			c.Abort()
 			return
 		}
+	} else {
+		userString := fmt.Sprintf("%v", user)
+		log.Println("INFO: Session found! User: " + userString)
+		log.Println("INFO: Authenticated")
 	}
 	c.Next()
 }

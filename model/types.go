@@ -41,3 +41,10 @@ type User struct {
 	PasswordHash string `json:"PasswordHash"`
 	CreationDate string `json:"CreationDate"`
 }
+
+type ProposedUser struct {
+	Id           int    `json:"Id"`
+	UserName     string `json:"UserName"`
+	Password     string `json:"Password"`
+	CreationDate string `json:"CreationDate"`
+}

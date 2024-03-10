@@ -1,5 +1,5 @@
 --
--- File generated with SQLiteStudio v3.4.4 on Sat Feb 24 23:24:26 2024
+-- File generated with SQLiteStudio v3.4.4 on Sun Mar 10 19:16:00 2024
 --
 -- Text encoding used: UTF-8
 --
@@ -37,7 +37,8 @@ CREATE TABLE IF NOT EXISTS Domains (
                           UNIQUE,
     DomainName   STRING   UNIQUE
                           NOT NULL,
-    CreatorId    INTEGER  REFERENCES Users (Id),
+    CreatorId    INTEGER  REFERENCES Users (Id) 
+                          NOT NULL,
     CreationDate DATETIME NOT NULL
                           DEFAULT (CURRENT_TIMESTAMP) 
 );
@@ -51,6 +52,7 @@ CREATE TABLE IF NOT EXISTS Hosts (
                           NOT NULL
                           UNIQUE,
     HostName     STRING   NOT NULL,
+    MacAddresses JSON     NOT NULL,
     CreatorId    INTEGER  REFERENCES Users (Id) 
                           NOT NULL,
     CreationDate DATETIME NOT NULL
@@ -62,23 +64,21 @@ CREATE TABLE IF NOT EXISTS Hosts (
 DROP TABLE IF EXISTS Subnets;
 
 CREATE TABLE IF NOT EXISTS Subnets (
-    Id                         INTEGER  NOT NULL
-                                        UNIQUE
-                                        PRIMARY KEY AUTOINCREMENT,
-    NetworkName                STRING   NOT NULL
-                                        UNIQUE,
-    AddressStart               STRING   NOT NULL
-                                        UNIQUE,
-    AddressEnd                 STRING,
-    BitMask                    INTEGER  NOT NULL,
-    GatewayAddress             STRING,
-    NumberOfAvailableAddresses INTEGER  NOT NULL,
-    DomainId                   INTEGER  NOT NULL
-                                        REFERENCES Domains (Id),
-    CreatorId                  INTEGER  REFERENCES Users (Id) 
-                                        NOT NULL,
-    CreationDate               DATETIME NOT NULL
-                                        DEFAULT (CURRENT_TIMESTAMP) 
+    Id             INTEGER  NOT NULL
+                            UNIQUE
+                            PRIMARY KEY AUTOINCREMENT,
+    NetworkName    STRING   NOT NULL
+                            UNIQUE,
+    NetworkPrefix  STRING   NOT NULL
+                            UNIQUE,
+    BitMask        INTEGER  NOT NULL,
+    GatewayAddress STRING   NOT NULL,
+    DomainId       INTEGER  NOT NULL
+                            REFERENCES Domains (Id),
+    CreatorId      INTEGER  REFERENCES Users (Id) 
+                            NOT NULL,
+    CreationDate   DATETIME NOT NULL
+                            DEFAULT (CURRENT_TIMESTAMP) 
 );
 
 

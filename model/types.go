@@ -18,8 +18,17 @@ type Domain struct {
 }
 
 type Host struct {
+	Id           int      `json:"Id"`
+	HostName     string   `json:"HostName"`
+	MacAddresses []string `json:"MacAddresses"`
+	CreatorId    int      `json:"CreatorId"`
+	CreationDate string   `json:"CreationDate"`
+}
+
+type StringHost struct {
 	Id           int    `json:"Id"`
 	HostName     string `json:"HostName"`
+	MacAddresses string `json:"MacAddresses"`
 	CreatorId    int    `json:"CreatorId"`
 	CreationDate string `json:"CreationDate"`
 }

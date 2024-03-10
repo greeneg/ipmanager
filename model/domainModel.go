@@ -2,6 +2,27 @@ package model
 
 import "database/sql"
 
+func CreateDomain(d Domain, id int) (bool, error) {
+	t, err := DB.Begin()
+	if err != nil {
+		return false, err
+	}
+
+	q, err := t.Prepare("INSERT INTO Domains (DomainName, CreatorId) VALUES (?, ?)")
+	if err != nil {
+		return false, err
+	}
+
+	_, err = q.Exec(d.DomainName, id)
+	if err != nil {
+		return false, err
+	}
+
+	t.Commit()
+
+	return true, nil
+}
+
 func GetDomainById(id int) (Domain, error) {
 	rec, err := DB.Prepare("SELECT * FROM Domains WHERE Id = ?")
 	if err != nil {

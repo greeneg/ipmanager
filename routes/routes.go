@@ -39,9 +39,9 @@ func PublicRoutes(g *gin.RouterGroup, i *controllers.IpManager) {
 
 func PrivateRoutes(g *gin.RouterGroup, i *controllers.IpManager) {
 	// domain related routes
-	g.POST("/domain")
+	g.POST("/domain", i.CreateDomain)
 	// host related routes
-	g.POST("/host")
+	g.POST("/host", i.CreateHost)
 	// user related routes
 	g.POST("/user", i.CreateUser) // create new user
 	g.PUT("/user/:name")          // update a user password or to lock the account

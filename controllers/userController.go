@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"log"
 	"net/http"
 	"strconv"
 
@@ -27,7 +28,11 @@ func (i *IpManager) CreateUser(c *gin.Context) {
 func (i *IpManager) DeleteUser(c *gin.Context) {
 	username := c.Param("name")
 	status, err := model.DeleteUser(username)
-	helpers.CheckError(err)
+	if err != nil {
+		log.Println("ERROR: Cannot delete user: " + string(err.Error()))
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "Unable to remove user! " + string(err.Error())})
+		return
+	}
 
 	if status {
 		c.IndentedJSON(http.StatusOK, gin.H{"message": "User " + username + " has been removed from system"})

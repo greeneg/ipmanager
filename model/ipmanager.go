@@ -9,7 +9,7 @@ import (
 var DB *sql.DB
 
 func ConnectDatabase(dbPath string) error {
-	db, err := sql.Open("sqlite3", dbPath)
+	db, err := sql.Open("sqlite3", "file:"+dbPath+"?_foreign_keys=on")
 	if err != nil {
 		return err
 	}

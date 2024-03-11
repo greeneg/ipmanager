@@ -1,0 +1,331 @@
+{
+	"info": {
+		"_postman_id": "2289e3fe-fc58-4d2f-9031-92114f20eddc",
+		"name": "IpManager",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get Users",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{serviceHost}}/api/v1/users",
+					"protocol": "http",
+					"host": [
+						"{{serviceHost}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Domains",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{serviceHost}}/api/v1/domains",
+					"protocol": "http",
+					"host": [
+						"{{serviceHost}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"domains"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Hosts",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{serviceHost}}/api/v1/hosts",
+					"protocol": "http",
+					"host": [
+						"{{serviceHost}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"hosts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Subnets",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{serviceHost}}/api/v1/subnets",
+					"protocol": "http",
+					"host": [
+						"{{serviceHost}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"subnets"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Address Assignments",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{serviceHost}}/api/v1/addresses",
+					"protocol": "http",
+					"host": [
+						"{{serviceHost}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"addresses"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Domain",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"DomainName\": \"{{domainname}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{serviceHost}}/api/v1/domain",
+					"protocol": "http",
+					"host": [
+						"{{serviceHost}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"domain"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Host",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"HostName\": \"{{hostname}}\",\n    \"MacAddresses\": [\n        {{macAddresses}}\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{serviceHost}}/api/v1/host",
+					"protocol": "http",
+					"host": [
+						"{{serviceHost}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"host"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create User",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"UserName\": \"{{username}}\",\n    \"Password\": \"{{userPassword}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{serviceHost}}/api/v1/user",
+					"protocol": "http",
+					"host": [
+						"{{serviceHost}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Domain",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://{{serviceHost}}/api/v1/domain/{{domainname}}",
+					"protocol": "http",
+					"host": [
+						"{{serviceHost}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"domain",
+						"{{domainname}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Host",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://{{serviceHost}}/api/v1/host/{{hostname}}",
+					"protocol": "http",
+					"host": [
+						"{{serviceHost}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"host",
+						"{{hostname}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete User",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://{{serviceHost}}/api/v1/user/{{username}}",
+					"protocol": "http",
+					"host": [
+						"{{serviceHost}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"user",
+						"{{username}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "basic",
+		"basic": [
+			{
+				"key": "password",
+				"value": "{{password}}",
+				"type": "string"
+			},
+			{
+				"key": "username",
+				"value": "admin",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "password",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "serviceHost",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "username",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "userPassword",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "domainname",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "hostname",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "macAddresses",
+			"value": "",
+			"type": "default"
+		}
+	]
+}

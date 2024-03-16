@@ -10,6 +10,17 @@ import (
 	"github.com/greeneg/ipmanager/model"
 )
 
+// CreateUser godoc
+// @Summary Register user
+// @Description Add a new user
+// @Tags user
+// @Accept json
+// @Produce json
+// @Param user body model.ProposedUser true "User Data"
+// @Security BasicAuth
+// @Success 200 {object} model.SuccessMsg
+// @Failure 400 {object} model.FailureMsg
+// @Router /user [post]
 func (i *IpManager) CreateUser(c *gin.Context) {
 	var json model.ProposedUser
 	if err := c.ShouldBindJSON(&json); err != nil {

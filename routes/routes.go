@@ -50,9 +50,9 @@ func PrivateRoutes(g *gin.RouterGroup, i *controllers.IpManager) {
 	g.POST("/domain", i.CreateDomain)               // create a domain
 	g.DELETE("/domain/:domainname", i.DeleteDomain) // trash a domain
 	// host related routes
-	g.POST("/host", i.CreateHost) // create a host
-	g.PATCH("/host/:hostname")    // replace a host's MAC addresses
-	g.DELETE("/host/:hostname")   // trash a host
+	g.POST("/host", i.CreateHost)                 // create a host
+	g.PATCH("/host/:hostname")                    // replace a host's MAC addresses
+	g.DELETE("/host/:hostname", i.DeleteHostname) // trash a host
 	// subnet related routes
 	g.POST("/subnet")                // create new subnet
 	g.PATCH("/subnet/:networkname")  // update a subnet's network information

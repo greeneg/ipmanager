@@ -56,7 +56,7 @@ func AuthCheck(c *gin.Context) {
 		}
 	} else {
 		userString := fmt.Sprintf("%v", user)
-		log.Println("INFO: Session found! User: " + userString)
+		log.Println("INFO: Session found: User: " + userString)
 		log.Println("INFO: Authenticated")
 	}
 	c.Next()

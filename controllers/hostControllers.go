@@ -51,6 +51,22 @@ func (i *IpManager) CreateHost(c *gin.Context) {
 	}
 }
 
+func (i *IpManager) DeleteHostname(c *gin.Context) {
+	hostname := c.Param("hostname")
+	status, err := model.DeleteDomain(hostname)
+	if err != nil {
+		log.Println("ERROR: Cannot delete host: " + string(err.Error()))
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "Unable to remove host! " + string(err.Error())})
+		return
+	}
+
+	if status {
+		c.IndentedJSON(http.StatusOK, gin.H{"message": "host " + hostname + " has been removed from system"})
+	} else {
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "Unable to remove host!"})
+	}
+}
+
 func (i *IpManager) GetHosts(c *gin.Context) {
 	hosts, err := model.GetHosts()
 	helpers.CheckError(err)

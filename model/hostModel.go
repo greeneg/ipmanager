@@ -31,6 +31,10 @@ func CreateHost(h Host, id int) (bool, error) {
 	return true, nil
 }
 
+func DeleteHostname(hostname string) (bool, error) {
+	return true, nil
+}
+
 func GetHostById(id int) (Host, error) {
 	rec, err := DB.Prepare("SELECT * FROM Hosts WHERE Id = ?")
 	if err != nil {

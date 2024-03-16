@@ -59,3 +59,11 @@ type ProposedUser struct {
 	Password     string `json:"Password"`
 	CreationDate string `json:"CreationDate"`
 }
+
+type FailureMsg struct {
+	Error string `json:"error"`
+}
+
+type SuccessMsg struct {
+	Message string `json:"message"`
+}

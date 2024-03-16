@@ -1,0 +1,69 @@
+basePath: /api/v1
+definitions:
+  model.FailureMsg:
+    properties:
+      error:
+        type: string
+    type: object
+  model.ProposedUser:
+    properties:
+      CreationDate:
+        type: string
+      Id:
+        type: integer
+      Password:
+        type: string
+      Status:
+        type: string
+      UserName:
+        type: string
+    type: object
+  model.SuccessMsg:
+    properties:
+      message:
+        type: string
+    type: object
+host: localhost:8000
+info:
+  contact:
+    name: Gary Greene
+    url: https://github.com/greeneg/ipmanager
+  description: A simple API for managing networks
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  title: IpManager API
+  version: 0.0.2
+paths:
+  /user:
+    post:
+      consumes:
+      - application/json
+      description: Add a new user
+      parameters:
+      - description: User Data
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/model.ProposedUser'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.SuccessMsg'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.FailureMsg'
+      security:
+      - BasicAuth: []
+      summary: Register user
+      tags:
+      - user
+securityDefinitions:
+  BasicAuth:
+    type: basic
+swagger: "2.0"

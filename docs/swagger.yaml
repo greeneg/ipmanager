@@ -1,5 +1,14 @@
 basePath: /api/v1
 definitions:
+  controllers.SafeUser:
+    properties:
+      creationDate:
+        type: string
+      id:
+        type: integer
+      userName:
+        type: string
+    type: object
   model.FailureMsg:
     properties:
       error:
@@ -43,6 +52,13 @@ definitions:
       userStatus:
         type: string
     type: object
+  model.UsersList:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/model.User'
+        type: array
+    type: object
 host: localhost:8000
 info:
   contact:
@@ -53,7 +69,7 @@ info:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
   title: IpManager API
-  version: 0.0.3
+  version: 0.0.4
 paths:
   /user:
     post:
@@ -83,18 +99,17 @@ paths:
       summary: Register user
       tags:
       - user
-  /user/:name:
-    post:
+  /user/{name}:
+    delete:
       consumes:
       - application/json
       description: Delete a user
       parameters:
-      - description: User Data
-        in: body
-        name: user
+      - description: User name
+        in: path
+        name: name
         required: true
-        schema:
-          $ref: '#/definitions/model.User'
+        type: string
       produces:
       - application/json
       responses:
@@ -111,18 +126,17 @@ paths:
       summary: Delete user
       tags:
       - user
-  /user/:name/status:
+  /user/{name}/status:
     get:
       consumes:
       - application/json
       description: Retrieve a user's active status
       parameters:
-      - description: User Data
-        in: body
-        name: user
+      - description: User name
+        in: path
+        name: name
         required: true
-        schema:
-          $ref: '#/definitions/model.User'
+        type: string
       produces:
       - application/json
       responses:
@@ -137,6 +151,101 @@ paths:
       security:
       - BasicAuth: []
       summary: Retrieve a user's active status. Can be either 'enabled' or 'locked'
+      tags:
+      - user
+    patch:
+      consumes:
+      - application/json
+      description: Set a user's active status
+      parameters:
+      - description: User Data
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/model.User'
+      - description: User name
+        in: path
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.UserStatusMsg'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.FailureMsg'
+      security:
+      - BasicAuth: []
+      summary: Set a user's active status. Can be either 'enabled' or 'locked'
+      tags:
+      - user
+  /user/id/{id}:
+    get:
+      description: Retrieve a user by their Id
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.SafeUser'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.FailureMsg'
+      summary: Retrieve a user by their Id
+      tags:
+      - user
+  /user/name/{name}:
+    get:
+      description: Retrieve a user by their UserName
+      parameters:
+      - description: User name
+        in: path
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.SafeUser'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.FailureMsg'
+      summary: Retrieve a user by their UserName
+      tags:
+      - user
+  /users:
+    get:
+      description: Retrieve list of all users
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.UsersList'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.FailureMsg'
+      summary: Retrieve list of all users
       tags:
       - user
 securityDefinitions:

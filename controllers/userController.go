@@ -62,11 +62,11 @@ func (i *IpManager) CreateUser(c *gin.Context) {
 //	@Tags			user
 //	@Accept			json
 //	@Produce		json
-//	@Param			user	body	model.User	true	"User Data"
+//	@Param			name	path	string	true	"User name"
 //	@Security		BasicAuth
 //	@Success		200	{object}	model.SuccessMsg
 //	@Failure		400	{object}	model.FailureMsg
-//	@Router			/user/:name [post]
+//	@Router			/user/{name} [delete]
 func (i *IpManager) DeleteUser(c *gin.Context) {
 	username := c.Param("name")
 	status, err := model.DeleteUser(username)
@@ -90,11 +90,11 @@ func (i *IpManager) DeleteUser(c *gin.Context) {
 //	@Tags			user
 //	@Accept			json
 //	@Produce		json
-//	@Param			user	body	model.User.UserName	true	"User Data"
+//	@Param			name	path	string	true	"User name"
 //	@Security		BasicAuth
 //	@Success		200	{object}	model.UserStatusMsg
 //	@Failure		400	{object}	model.FailureMsg
-//	@Router			/user/:name/status [get]
+//	@Router			/user/{name}/status [get]
 func (i *IpManager) GetUserStatus(c *gin.Context) {
 	username := c.Param("name")
 	status, err := model.GetUserStatus(username)
@@ -110,6 +110,19 @@ func (i *IpManager) GetUserStatus(c *gin.Context) {
 	}
 }
 
+// SetUserStatus Set the active status of a user. Can be either 'enabled' or 'locked'
+//
+//	@Summary		Set a user's active status. Can be either 'enabled' or 'locked'
+//	@Description	Set a user's active status
+//	@Tags			user
+//	@Accept			json
+//	@Produce		json
+//	@Param			user	body	model.User.UserName	true	"User Data"
+//	@Param			name	path	string	true "User name"
+//	@Security		BasicAuth
+//	@Success		200	{object}	model.UserStatusMsg
+//	@Failure		400	{object}	model.FailureMsg
+//	@Router			/user/{name}/status [patch]
 func (i *IpManager) SetUserStatus(c *gin.Context) {
 	username := c.Param("name")
 	var json model.UserStatus
@@ -131,6 +144,15 @@ func (i *IpManager) SetUserStatus(c *gin.Context) {
 	}
 }
 
+// GetUsers Retrieve list of all users
+//
+//	@Summary		Retrieve list of all users
+//	@Description	Retrieve list of all users
+//	@Tags			user
+//	@Produce		json
+//	@Success		200	{object}	model.UsersList
+//	@Failure		400	{object}	model.FailureMsg
+//	@Router			/users [get]
 func (i *IpManager) GetUsers(c *gin.Context) {
 	users, err := model.GetUsers()
 	helpers.CheckError(err)
@@ -152,6 +174,16 @@ func (i *IpManager) GetUsers(c *gin.Context) {
 	}
 }
 
+// GetUserById Retrieve a user by their Id
+//
+//	@Summary		Retrieve a user by their Id
+//	@Description	Retrieve a user by their Id
+//	@Tags			user
+//	@Produce		json
+//	@Param			id	path int true "User ID"
+//	@Success		200	{object}	SafeUser
+//	@Failure		400	{object}	model.FailureMsg
+//	@Router			/user/id/{id} [get]
 func (i *IpManager) GetUserById(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
 	ent, err := model.GetUserById(id)
@@ -171,6 +203,16 @@ func (i *IpManager) GetUserById(c *gin.Context) {
 	}
 }
 
+// GetUserByName Retrieve a user by their UserName
+//
+//	@Summary		Retrieve a user by their UserName
+//	@Description	Retrieve a user by their UserName
+//	@Tags			user
+//	@Produce		json
+//	@Param			name	path	string	true	"User name"
+//	@Success		200	{object}	SafeUser
+//	@Failure		400	{object}	model.FailureMsg
+//	@Router			/user/name/{name} [get]
 func (i *IpManager) GetUserByUserName(c *gin.Context) {
 	username := c.Param("name")
 	ent, err := model.GetUserByUserName(username)

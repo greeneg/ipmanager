@@ -95,6 +95,6 @@ type UserStatusMsg struct {
 	UserStatus string `json:"userStatus"`
 }
 
-type InvalidValue struct {
-	Error error
+type UsersList struct {
+	Data []User `json:"data"`
 }

@@ -55,6 +55,18 @@ func (i *IpManager) CreateUser(c *gin.Context) {
 	}
 }
 
+// DeleteUser Remove a user for authentication and authorization
+//
+//	@Summary		Delete user
+//	@Description	Delete a user
+//	@Tags			user
+//	@Accept			json
+//	@Produce		json
+//	@Param			user	body	model.User	true	"User Data"
+//	@Security		BasicAuth
+//	@Success		200	{object}	model.SuccessMsg
+//	@Failure		400	{object}	model.FailureMsg
+//	@Router			/user/:name [post]
 func (i *IpManager) DeleteUser(c *gin.Context) {
 	username := c.Param("name")
 	status, err := model.DeleteUser(username)
@@ -71,7 +83,53 @@ func (i *IpManager) DeleteUser(c *gin.Context) {
 	}
 }
 
-func (i *IpManager) GetUserStatus(c *gin.Context) {}
+// GetUserStatus Retrieve the active status of a user. Can be either 'enabled' or 'locked'
+//
+//	@Summary		Retrieve a user's active status. Can be either 'enabled' or 'locked'
+//	@Description	Retrieve a user's active status
+//	@Tags			user
+//	@Accept			json
+//	@Produce		json
+//	@Param			user	body	model.User.UserName	true	"User Data"
+//	@Security		BasicAuth
+//	@Success		200	{object}	model.UserStatusMsg
+//	@Failure		400	{object}	model.FailureMsg
+//	@Router			/user/:name/status [get]
+func (i *IpManager) GetUserStatus(c *gin.Context) {
+	username := c.Param("name")
+	status, err := model.GetUserStatus(username)
+	if err != nil {
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "Unable to get the user " + username + " status: " + string(err.Error())})
+		return
+	}
+
+	if status != "" {
+		c.IndentedJSON(http.StatusOK, gin.H{"message": "User status: " + status, "userStatus": status})
+	} else {
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": "Unable to retrieve user status"})
+	}
+}
+
+func (i *IpManager) SetUserStatus(c *gin.Context) {
+	username := c.Param("name")
+	var json model.UserStatus
+	if err := c.ShouldBindJSON(&json); err != nil {
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	status, err := model.SetUserStatus(username, json)
+	if err != nil {
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": string(err.Error())})
+		return
+	}
+
+	if status {
+		c.IndentedJSON(http.StatusOK, gin.H{"message": "User '" + username + "' has been " + json.Status})
+	} else {
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": err})
+	}
+}
 
 func (i *IpManager) GetUsers(c *gin.Context) {
 	users, err := model.GetUsers()

@@ -27,9 +27,18 @@ import (
 	"github.com/greeneg/ipmanager/model"
 )
 
+func CheckIsNotLocked(u model.User) bool {
+	return u.Status != "locked"
+}
+
 func CheckUserPass(username, password string) bool {
 	user, err := model.GetUserByUserName(username)
 	if err != nil {
+		return false
+	}
+
+	status := CheckIsNotLocked(user)
+	if !status {
 		return false
 	}
 

@@ -23,6 +23,26 @@ definitions:
       message:
         type: string
     type: object
+  model.User:
+    properties:
+      CreationDate:
+        type: string
+      Id:
+        type: integer
+      PasswordHash:
+        type: string
+      Status:
+        type: string
+      UserName:
+        type: string
+    type: object
+  model.UserStatusMsg:
+    properties:
+      message:
+        type: string
+      userStatus:
+        type: string
+    type: object
 host: localhost:8000
 info:
   contact:
@@ -33,7 +53,7 @@ info:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
   title: IpManager API
-  version: 0.0.2
+  version: 0.0.3
 paths:
   /user:
     post:
@@ -61,6 +81,62 @@ paths:
       security:
       - BasicAuth: []
       summary: Register user
+      tags:
+      - user
+  /user/:name:
+    post:
+      consumes:
+      - application/json
+      description: Delete a user
+      parameters:
+      - description: User Data
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/model.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.SuccessMsg'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.FailureMsg'
+      security:
+      - BasicAuth: []
+      summary: Delete user
+      tags:
+      - user
+  /user/:name/status:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a user's active status
+      parameters:
+      - description: User Data
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/model.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.UserStatusMsg'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.FailureMsg'
+      security:
+      - BasicAuth: []
+      summary: Retrieve a user's active status. Can be either 'enabled' or 'locked'
       tags:
       - user
 securityDefinitions:

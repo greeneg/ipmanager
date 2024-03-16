@@ -29,6 +29,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/greeneg/ipmanager/globals"
 	"github.com/greeneg/ipmanager/helpers"
+	"github.com/greeneg/ipmanager/model"
 )
 
 func processAuthorizationHeader(authHeader string) (string, string) {
@@ -75,7 +76,22 @@ func AuthCheck(c *gin.Context) {
 	} else {
 		userString := fmt.Sprintf("%v", user)
 		log.Println("INFO: Session found: User: " + userString)
-		log.Println("INFO: Authenticated")
+		log.Println("INFO: Checking if user is locked or not...")
+		user, err := model.GetUserByUserName(userString)
+		if err != nil {
+			log.Println("ERROR: " + string(err.Error()))
+			c.IndentedJSON(http.StatusUnauthorized, gin.H{"error": "unable to authenticate: " + err.Error()})
+			return
+		}
+		status := helpers.CheckIsNotLocked(user)
+		if status {
+			log.Println("INFO: Authenticated")
+		} else {
+			log.Println("WARN: User '" + userString + "' is locked!")
+			c.IndentedJSON(http.StatusUnauthorized, gin.H{"error": "not authorized!"})
+			c.Abort()
+			return
+		}
 	}
 	c.Next()
 }

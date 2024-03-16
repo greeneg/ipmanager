@@ -78,10 +78,23 @@ type ProposedUser struct {
 	CreationDate string `json:"CreationDate"`
 }
 
+type UserStatus struct {
+	Status string `json:"status"`
+}
+
 type FailureMsg struct {
 	Error string `json:"error"`
 }
 
 type SuccessMsg struct {
 	Message string `json:"message"`
+}
+
+type UserStatusMsg struct {
+	Message    string `json:"message"`
+	UserStatus string `json:"userStatus"`
+}
+
+type InvalidValue struct {
+	Error error
 }

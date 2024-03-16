@@ -46,7 +46,7 @@ import (
 )
 
 //	@title			IpManager API
-//	@version		0.0.3
+//	@version		0.0.4
 //	@description	A simple API for managing networks
 
 //	@contact.name	Gary Greene

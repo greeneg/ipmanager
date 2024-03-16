@@ -1,5 +1,23 @@
 package controllers
 
+/*
+
+  Copyright 2024, YggdrasilSoft, LLC.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+
+*/
+
 import (
 	"log"
 	"net/http"
@@ -10,17 +28,18 @@ import (
 	"github.com/greeneg/ipmanager/model"
 )
 
-// CreateUser godoc
-// @Summary Register user
-// @Description Add a new user
-// @Tags user
-// @Accept json
-// @Produce json
-// @Param user body model.ProposedUser true "User Data"
-// @Security BasicAuth
-// @Success 200 {object} model.SuccessMsg
-// @Failure 400 {object} model.FailureMsg
-// @Router /user [post]
+// CreateUser Register a user for authentication and authorization
+//
+//	@Summary		Register user
+//	@Description	Add a new user
+//	@Tags			user
+//	@Accept			json
+//	@Produce		json
+//	@Param			user	body	model.ProposedUser	true	"User Data"
+//	@Security		BasicAuth
+//	@Success		200	{object}	model.SuccessMsg
+//	@Failure		400	{object}	model.FailureMsg
+//	@Router			/user [post]
 func (i *IpManager) CreateUser(c *gin.Context) {
 	var json model.ProposedUser
 	if err := c.ShouldBindJSON(&json); err != nil {

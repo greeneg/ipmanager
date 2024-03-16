@@ -1,5 +1,28 @@
 package main
 
+/*
+
+  IpManager - Golang-based web service for managing networks
+
+  Author:  Gary L. Greene, Jr.
+  License: Apache v2.0
+
+  Copyright 2024, YggdrasilSoft, LLC.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+
+*/
+
 import (
 	"encoding/json"
 	"os"
@@ -22,22 +45,22 @@ import (
 	"github.com/greeneg/ipmanager/routes"
 )
 
-// @title IpManager API
-// @version 0.0.2
-// @description A simple API for managing networks
+//	@title			IpManager API
+//	@version		0.0.3
+//	@description	A simple API for managing networks
 
-// @contact.name Gary Greene
-// @contact.url https://github.com/greeneg/ipmanager
+//	@contact.name	Gary Greene
+//	@contact.url	https://github.com/greeneg/ipmanager
 
-// @securityDefinitions.basic BasicAuth
+//	@securityDefinitions.basic	BasicAuth
 
-// @license.name Apache 2.0
-// @license.url http://www.apache.org/licenses/LICENSE-2.0.html
+//	@license.name	Apache 2.0
+//	@license.url	http://www.apache.org/licenses/LICENSE-2.0.html
 
-// @host localhost:8000
-// @BasePath /api/v1
+//	@host		localhost:8000
+//	@BasePath	/api/v1
 
-// @schemas http
+// @schemas	http
 func main() {
 	r := gin.Default()
 	r.SetTrustedProxies(nil)

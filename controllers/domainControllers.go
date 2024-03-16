@@ -30,6 +30,18 @@ import (
 	"github.com/greeneg/ipmanager/model"
 )
 
+// CreateDomain Add a domain
+//
+//	@Summary		Create a new domain
+//	@Description	Create a new domain
+//	@Tags			domain
+//	@Accept			json
+//	@Produce		json
+//	@Param			domain	body	model.Domain	true	"Domain data"
+//	@Security		BasicAuth
+//	@Success		200	{object}	model.SuccessMsg
+//	@Failure		400	{object}	model.FailureMsg
+//	@Router			/domain [post]
 func (i *IpManager) CreateDomain(c *gin.Context) {
 	var json model.Domain
 	if err := c.ShouldBindJSON(&json); err != nil {
@@ -68,6 +80,17 @@ func (i *IpManager) CreateDomain(c *gin.Context) {
 	}
 }
 
+// DeleteDomain Add a domain
+//
+//	@Summary		Delete a domain
+//	@Description	Delete a domain
+//	@Tags			domain
+//	@Produce		json
+//	@Param			domainname	path	string	true	"Domain name"
+//	@Security		BasicAuth
+//	@Success		200	{object}	model.SuccessMsg
+//	@Failure		400	{object}	model.FailureMsg
+//	@Router			/domain/{domainname} [delete]
 func (i *IpManager) DeleteDomain(c *gin.Context) {
 	domain := c.Param("domainname")
 	status, err := model.DeleteDomain(domain)
@@ -84,6 +107,15 @@ func (i *IpManager) DeleteDomain(c *gin.Context) {
 	}
 }
 
+// GetDomains Retrieve a list of domain
+//
+//	@Summary		Retrieve a list of domain
+//	@Description	Retrieve a list of domain
+//	@Tags			domain
+//	@Produce		json
+//	@Success		200	{object}	model.DomainList
+//	@Failure		400	{object}	model.FailureMsg
+//	@Router			/domains [get]
 func (i *IpManager) GetDomains(c *gin.Context) {
 	domains, err := model.GetDomains()
 	helpers.CheckError(err)
@@ -95,6 +127,16 @@ func (i *IpManager) GetDomains(c *gin.Context) {
 	}
 }
 
+// GetDomainById Retrieve a domain by Id
+//
+//	@Summary		Retrieve a domain by Id
+//	@Description	Retrieve a domain by Id
+//	@Tags			domain
+//	@Produce		json
+//	@Param			domainid	path	string	true	"Domain Id"
+//	@Success		200	{object}	model.Domain
+//	@Failure		400	{object}	model.FailureMsg
+//	@Router			/domain/id/{domainid} [get]
 func (i *IpManager) GetDomainById(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("domainid"))
 	ent, err := model.GetDomainById(id)
@@ -108,6 +150,16 @@ func (i *IpManager) GetDomainById(c *gin.Context) {
 	}
 }
 
+// GetDomainByName Retrieve a domain by DomainName
+//
+//	@Summary		Retrieve a domain by DomainName
+//	@Description	Retrieve a domain by DomainName
+//	@Tags			domain
+//	@Produce		json
+//	@Param			domainname	path	string	true	"Domain name"
+//	@Success		200	{object}	model.Domain
+//	@Failure		400	{object}	model.FailureMsg
+//	@Router			/domain/name/{domainname} [get]
 func (i *IpManager) GetDomainByDomainName(c *gin.Context) {
 	domain := c.Param("domainname")
 	ent, err := model.GetDomainByDomainName(domain)

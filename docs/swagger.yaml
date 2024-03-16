@@ -9,6 +9,24 @@ definitions:
       userName:
         type: string
     type: object
+  model.Domain:
+    properties:
+      CreationDate:
+        type: string
+      CreatorId:
+        type: integer
+      DomainName:
+        type: string
+      Id:
+        type: integer
+    type: object
+  model.DomainList:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/model.Domain'
+        type: array
+    type: object
   model.FailureMsg:
     properties:
       error:
@@ -69,8 +87,124 @@ info:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
   title: IpManager API
-  version: 0.0.4
+  version: 0.0.6
 paths:
+  /domain:
+    post:
+      consumes:
+      - application/json
+      description: Create a new domain
+      parameters:
+      - description: Domain data
+        in: body
+        name: domain
+        required: true
+        schema:
+          $ref: '#/definitions/model.Domain'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.SuccessMsg'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.FailureMsg'
+      security:
+      - BasicAuth: []
+      summary: Create a new domain
+      tags:
+      - domain
+  /domain/{domainname}:
+    delete:
+      description: Delete a domain
+      parameters:
+      - description: Domain name
+        in: path
+        name: domainname
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.SuccessMsg'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.FailureMsg'
+      security:
+      - BasicAuth: []
+      summary: Delete a domain
+      tags:
+      - domain
+  /domain/id/{domainid}:
+    get:
+      description: Retrieve a domain by Id
+      parameters:
+      - description: Domain Id
+        in: path
+        name: domainid
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Domain'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.FailureMsg'
+      summary: Retrieve a domain by Id
+      tags:
+      - domain
+  /domain/name/{domainname}:
+    get:
+      description: Retrieve a domain by DomainName
+      parameters:
+      - description: Domain name
+        in: path
+        name: domainname
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Domain'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.FailureMsg'
+      summary: Retrieve a domain by DomainName
+      tags:
+      - domain
+  /domains:
+    get:
+      description: Retrieve a list of domain
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.DomainList'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.FailureMsg'
+      summary: Retrieve a list of domain
+      tags:
+      - domain
   /user:
     post:
       consumes:

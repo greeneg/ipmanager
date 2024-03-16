@@ -95,6 +95,10 @@ type UserStatusMsg struct {
 	UserStatus string `json:"userStatus"`
 }
 
+type DomainList struct {
+	Data []Domain `json:"data"`
+}
+
 type UsersList struct {
 	Data []User `json:"data"`
 }

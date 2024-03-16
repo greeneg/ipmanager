@@ -17,6 +17,7 @@ func PublicRoutes(g *gin.RouterGroup, i *controllers.IpManager) {
 	g.GET("/addresses/filter/domain/name/:domainname", i.GetAddressesByDomainName)
 	g.GET("/addresses/filter/subnet/id/:subnetid", i.GetAddressesBySubnetId)
 	g.GET("/addresses/filter/subnet/name/:subnetname", i.GetAddressesBySubnetName)
+	g.GET("/addresses/filter/subnet/name/:subnetname/unassigned")
 	// domain related routes
 	g.GET("/domain/filter/id/:domainid", i.GetDomainById)
 	g.GET("/domain/filter/name/:domainname", i.GetDomainByDomainName)
@@ -35,18 +36,31 @@ func PublicRoutes(g *gin.RouterGroup, i *controllers.IpManager) {
 	g.GET("/user/id/:id", i.GetUserById)
 	g.GET("/user/name/:name", i.GetUserByUserName)
 	g.GET("/users", i.GetUsers)
+	// service related routes
+	g.OPTIONS("/")   // API options
+	g.GET("/health") // service health
 }
 
 func PrivateRoutes(g *gin.RouterGroup, i *controllers.IpManager) {
+	// address assignment related routes
+	g.POST("/address")            // assign an address to a host
+	g.PUT("/address/:address")    // update an address' assignment
+	g.DELETE("/address/:address") // trash an address assignment
 	// domain related routes
-	g.POST("/domain", i.CreateDomain)
-	g.DELETE("/domain/:domainname")
+	g.POST("/domain", i.CreateDomain)               // create a domain
+	g.DELETE("/domain/:domainname", i.DeleteDomain) // trash a domain
 	// host related routes
-	g.POST("/host", i.CreateHost)
-	g.PUT("/host/:hostname")
-	g.DELETE("/host/:hostname")
+	g.POST("/host", i.CreateHost) // create a host
+	g.PUT("/host/:hostname")      // replace a host's MAC addresses
+	g.DELETE("/host/:hostname")   // trash a host
+	// subnet related routes
+	g.POST("/subnet")                // create new subnet
+	g.PUT("/subnet/:networkname")    // update a subnet's network information
+	g.DELETE("/subnet/:networkname") // trash a subnet
 	// user related routes
-	g.POST("/user", i.CreateUser) // create new user
-	g.PUT("/user/:name")          // update a user password or to lock the account
-	g.DELETE("/user/:name", i.DeleteUser)
+	g.POST("/user", i.CreateUser)         // create new user
+	g.PUT("/user/:name")                  // update a user password
+	g.PUT("/user/:name/status")           // lock a user
+	g.GET("/user/:name/status")           // get whether a user is locked or not
+	g.DELETE("/user/:name", i.DeleteUser) // trash a user
 }

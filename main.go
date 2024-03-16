@@ -19,6 +19,7 @@ import (
 
 func main() {
 	r := gin.Default()
+	r.SetTrustedProxies(nil)
 
 	// lets get our working directory
 	appdir, err := filepath.Abs(filepath.Dir(os.Args[0]))

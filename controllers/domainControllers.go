@@ -50,6 +50,22 @@ func (i *IpManager) CreateDomain(c *gin.Context) {
 	}
 }
 
+func (i *IpManager) DeleteDomain(c *gin.Context) {
+	domain := c.Param("domainname")
+	status, err := model.DeleteDomain(domain)
+	if err != nil {
+		log.Println("ERROR: Cannot delete domain: " + string(err.Error()))
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "Unable to remove domain! " + string(err.Error())})
+		return
+	}
+
+	if status {
+		c.IndentedJSON(http.StatusOK, gin.H{"message": "domain " + domain + " has been removed from system"})
+	} else {
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "Unable to remove domain!"})
+	}
+}
+
 func (i *IpManager) GetDomains(c *gin.Context) {
 	domains, err := model.GetDomains()
 	helpers.CheckError(err)

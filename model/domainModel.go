@@ -23,6 +23,29 @@ func CreateDomain(d Domain, id int) (bool, error) {
 	return true, nil
 }
 
+func DeleteDomain(domain string) (bool, error) {
+	t, err := DB.Begin()
+	if err != nil {
+		return false, err
+	}
+
+	q, err := DB.Prepare("DELETE FROM Domains WHERE DomainName IS ?")
+	if err != nil {
+		return false, err
+	}
+
+	defer q.Close()
+
+	_, err = q.Exec(domain)
+	if err != nil {
+		return false, err
+	}
+
+	t.Commit()
+
+	return true, nil
+}
+
 func GetDomainById(id int) (Domain, error) {
 	rec, err := DB.Prepare("SELECT * FROM Domains WHERE Id = ?")
 	if err != nil {

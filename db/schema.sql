@@ -1,5 +1,5 @@
 --
--- File generated with SQLiteStudio v3.4.4 on Sun Mar 10 19:16:00 2024
+-- File generated with SQLiteStudio v3.4.4 on Fri Mar 15 23:26:56 2024
 --
 -- Text encoding used: UTF-8
 --
@@ -51,7 +51,8 @@ CREATE TABLE IF NOT EXISTS Hosts (
     Id           INTEGER  PRIMARY KEY AUTOINCREMENT
                           NOT NULL
                           UNIQUE,
-    HostName     STRING   NOT NULL,
+    HostName     STRING   NOT NULL
+                          UNIQUE,
     MacAddresses JSON     NOT NULL,
     CreatorId    INTEGER  REFERENCES Users (Id) 
                           NOT NULL,
@@ -90,6 +91,8 @@ CREATE TABLE IF NOT EXISTS Users (
                          NOT NULL
                          UNIQUE,
     UserName     STRING  UNIQUE
+                         NOT NULL,
+    Status       STRING  DEFAULT enabled
                          NOT NULL,
     PasswordHash STRING  NOT NULL,
     CreationDate INTEGER NOT NULL

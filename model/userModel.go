@@ -16,6 +16,7 @@ func GetUserById(id int) (User, error) {
 	err = rec.QueryRow(id).Scan(
 		&user.Id,
 		&user.UserName,
+		&user.Status,
 		&user.PasswordHash,
 		&user.CreationDate,
 	)
@@ -113,6 +114,7 @@ func GetUsers() ([]User, error) {
 		err = rows.Scan(
 			&user.Id,
 			&user.UserName,
+			&user.Status,
 			&user.PasswordHash,
 			&user.CreationDate,
 		)
@@ -123,4 +125,9 @@ func GetUsers() ([]User, error) {
 	}
 
 	return users, nil
+}
+
+func GetUserStatus(username string) (string, error) {
+	status := ""
+	return status, nil
 }

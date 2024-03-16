@@ -41,6 +41,8 @@ func (i *IpManager) DeleteUser(c *gin.Context) {
 	}
 }
 
+func (i *IpManager) GetUserStatus(c *gin.Context) {}
+
 func (i *IpManager) GetUsers(c *gin.Context) {
 	users, err := model.GetUsers()
 	helpers.CheckError(err)

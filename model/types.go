@@ -47,6 +47,7 @@ type Subnet struct {
 type User struct {
 	Id           int    `json:"Id"`
 	UserName     string `json:"UserName"`
+	Status       string `json:"Status"`
 	PasswordHash string `json:"PasswordHash"`
 	CreationDate string `json:"CreationDate"`
 }
@@ -54,6 +55,7 @@ type User struct {
 type ProposedUser struct {
 	Id           int    `json:"Id"`
 	UserName     string `json:"UserName"`
+	Status       string `json:"Status"`
 	Password     string `json:"Password"`
 	CreationDate string `json:"CreationDate"`
 }

@@ -78,7 +78,7 @@ func main() {
 	routes.PrivateRoutes(private, IpManager)
 
 	// swagger doc
-	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
+	r.GET("/api/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
 	tcpPort := strconv.Itoa(IpManager.ConfStruct.TcpPort)
 	r.Run(":" + tcpPort)

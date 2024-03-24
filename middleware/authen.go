@@ -65,6 +65,7 @@ func AuthCheck(c *gin.Context) {
 			if err := session.Save(); err != nil {
 				c.IndentedJSON(http.StatusInternalServerError,
 					gin.H{"error": "failed to save user session"})
+				// session saving is not fatal, so allow them to proceed
 			}
 			log.Println("INFO: Authenticated")
 		} else {
@@ -81,6 +82,7 @@ func AuthCheck(c *gin.Context) {
 		if err != nil {
 			log.Println("ERROR: " + string(err.Error()))
 			c.IndentedJSON(http.StatusUnauthorized, gin.H{"error": "unable to authenticate: " + err.Error()})
+			c.Abort()
 			return
 		}
 		status := helpers.CheckIsNotLocked(user)

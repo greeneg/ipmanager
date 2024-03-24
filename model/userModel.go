@@ -25,7 +25,79 @@ import (
 	"errors"
 	"log"
 	"strconv"
+	"time"
 )
+
+func getStoredPasswordHash(username string) (string, error) {
+	q, err := DB.Prepare("SELECT PasswordHash FROM Users WHERE UserName = ?")
+	if err != nil {
+		return "", err
+	}
+	defer q.Close()
+
+	passwordHash := ""
+	err = q.QueryRow(username).Scan(
+		&passwordHash,
+	)
+	if err != nil {
+		return "", err
+	}
+
+	return passwordHash, nil
+}
+
+func storeNewPassword(hashedPassword string, username string) (bool, error) {
+	t, err := DB.Begin()
+	if err != nil {
+		return false, err
+	}
+
+	// now we need to create a new transaction to SET the password hash into the DB
+	q, err := DB.Prepare("UPDATE Users SET PasswordHash = ?, LastChangedDate = ? WHERE UserName = ?")
+	if err != nil {
+		return false, err
+	}
+
+	// get time stamp
+	tStamp := time.Now().Format("2006-01-02 15:04:05") // force into SQL DateTime format
+
+	_, err = q.Exec(hashedPassword, tStamp, username)
+	if err != nil {
+		return false, err
+	}
+
+	t.Commit()
+
+	return true, nil
+}
+
+func ChangeAccountPassword(username string, oldPassword string, newPassword string) (bool, error) {
+	hashedOldPassword := sha512.Sum512([]byte(oldPassword))
+	encodedHashedOldPassword := hex.EncodeToString(hashedOldPassword[:])
+
+	storedHash, err := getStoredPasswordHash(username)
+	if err != nil {
+		return false, err
+	}
+	log.Println("INFO: Retrieved stored hash")
+
+	// now get password hash from the db
+	if storedHash != encodedHashedOldPassword {
+		p := new(PasswordHashMismatch)
+		return false, p
+	}
+
+	// matches, so hash new password
+	hashedNewPassword := sha512.Sum512([]byte(newPassword))
+	encodedHashedNewPassword := hex.EncodeToString(hashedNewPassword[:])
+	_, err = storeNewPassword(encodedHashedNewPassword, username)
+	if err != nil {
+		return false, err
+	}
+	log.Println("INFO: Stored updated hash")
+
+	return true, nil
+}
 
 func GetUserById(id int) (User, error) {
 	rec, err := DB.Prepare("SELECT * FROM Users WHERE Id = ?")
@@ -40,6 +112,7 @@ func GetUserById(id int) (User, error) {
 		&user.Status,
 		&user.PasswordHash,
 		&user.CreationDate,
+		&user.LastChangedDate,
 	)
 	if err != nil {
 		if err == sql.ErrNoRows {
@@ -64,6 +137,7 @@ func GetUserByUserName(username string) (User, error) {
 		&user.Status,
 		&user.PasswordHash,
 		&user.CreationDate,
+		&user.LastChangedDate,
 	)
 	if err != nil {
 		if err == sql.ErrNoRows {
@@ -139,6 +213,7 @@ func GetUsers() ([]User, error) {
 			&user.Status,
 			&user.PasswordHash,
 			&user.CreationDate,
+			&user.LastChangedDate,
 		)
 		if err != nil {
 			return nil, err

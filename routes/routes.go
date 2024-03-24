@@ -76,9 +76,9 @@ func PrivateRoutes(g *gin.RouterGroup, i *controllers.IpManager) {
 	g.PATCH("/subnet/:networkname")  // update a subnet's network information
 	g.DELETE("/subnet/:networkname") // trash a subnet
 	// user related routes
-	g.POST("/user", i.CreateUser)                  // create new user
-	g.PATCH("/user/:name")                         // update a user password
-	g.PATCH("/user/:name/status", i.SetUserStatus) // lock a user
-	g.GET("/user/:name/status", i.GetUserStatus)   // get whether a user is locked or not
-	g.DELETE("/user/:name", i.DeleteUser)          // trash a user
+	g.POST("/user", i.CreateUser)                   // create new user
+	g.PATCH("/user/:name", i.ChangeAccountPassword) // update a user password
+	g.PATCH("/user/:name/status", i.SetUserStatus)  // lock a user
+	g.GET("/user/:name/status", i.GetUserStatus)    // get whether a user is locked or not
+	g.DELETE("/user/:name", i.DeleteUser)           // trash a user
 }

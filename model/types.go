@@ -63,11 +63,12 @@ type Subnet struct {
 }
 
 type User struct {
-	Id           int    `json:"Id"`
-	UserName     string `json:"UserName"`
-	Status       string `json:"Status"`
-	PasswordHash string `json:"PasswordHash"`
-	CreationDate string `json:"CreationDate"`
+	Id              int    `json:"Id"`
+	UserName        string `json:"UserName"`
+	Status          string `json:"Status"`
+	PasswordHash    string `json:"PasswordHash"`
+	CreationDate    string `json:"CreationDate"`
+	LastChangedDate string `json:"LastChangedDate"`
 }
 
 type ProposedUser struct {
@@ -97,6 +98,11 @@ type UserStatusMsg struct {
 
 type DomainList struct {
 	Data []Domain `json:"data"`
+}
+
+type PasswordChange struct {
+	OldPassword string `json:"oldPassword"`
+	NewPassword string `json:"newPassword"`
 }
 
 type UsersList struct {

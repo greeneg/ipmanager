@@ -1,5 +1,5 @@
 --
--- File generated with SQLiteStudio v3.4.4 on Fri Mar 15 23:26:56 2024
+-- File generated with SQLiteStudio v3.4.4 on Sat Mar 23 23:23:14 2024
 --
 -- Text encoding used: UTF-8
 --
@@ -87,16 +87,18 @@ CREATE TABLE IF NOT EXISTS Subnets (
 DROP TABLE IF EXISTS Users;
 
 CREATE TABLE IF NOT EXISTS Users (
-    Id           INTEGER PRIMARY KEY AUTOINCREMENT
-                         NOT NULL
-                         UNIQUE,
-    UserName     STRING  UNIQUE
-                         NOT NULL,
-    Status       STRING  DEFAULT enabled
-                         NOT NULL,
-    PasswordHash STRING  NOT NULL,
-    CreationDate INTEGER NOT NULL
-                         DEFAULT (CURRENT_TIMESTAMP) 
+    Id              INTEGER  PRIMARY KEY AUTOINCREMENT
+                             NOT NULL
+                             UNIQUE,
+    UserName        STRING   UNIQUE
+                             NOT NULL,
+    Status          STRING   DEFAULT enabled
+                             NOT NULL,
+    PasswordHash    STRING   NOT NULL,
+    CreationDate    DATETIME NOT NULL
+                             DEFAULT (CURRENT_TIMESTAMP),
+    LastChangedDate DATETIME NOT NULL
+                             DEFAULT (CURRENT_TIMESTAMP) 
 );
 
 

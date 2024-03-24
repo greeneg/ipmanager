@@ -32,6 +32,13 @@ definitions:
       error:
         type: string
     type: object
+  model.PasswordChange:
+    properties:
+      newPassword:
+        type: string
+      oldPassword:
+        type: string
+    type: object
   model.ProposedUser:
     properties:
       CreationDate:
@@ -56,6 +63,8 @@ definitions:
         type: string
       Id:
         type: integer
+      LastChangedDate:
+        type: string
       PasswordHash:
         type: string
       Status:
@@ -258,6 +267,38 @@ paths:
       security:
       - BasicAuth: []
       summary: Delete user
+      tags:
+      - user
+    patch:
+      consumes:
+      - application/json
+      description: Change password
+      parameters:
+      - description: User name
+        in: path
+        name: name
+        required: true
+        type: string
+      - description: Password data
+        in: body
+        name: changePassword
+        required: true
+        schema:
+          $ref: '#/definitions/model.PasswordChange'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.SuccessMsg'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.FailureMsg'
+      security:
+      - BasicAuth: []
+      summary: Change password
       tags:
       - user
   /user/{name}/status:

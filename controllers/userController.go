@@ -55,6 +55,40 @@ func (i *IpManager) CreateUser(c *gin.Context) {
 	}
 }
 
+// ChangeAccountPassowrd Change an account's password
+//
+//	@Summary		Change password
+//	@Description	Change password
+//	@Tags			user
+//	@Accept			json
+//	@Produce		json
+//	@Param			name	path	string	true	"User name"
+//	@Param			changePassword	body	model.PasswordChange	true	"Password data"
+//	@Security		BasicAuth
+//	@Success		200	{object}	model.SuccessMsg
+//	@Failure		400	{object}	model.FailureMsg
+//	@Router			/user/{name} [patch]
+func (i *IpManager) ChangeAccountPassword(c *gin.Context) {
+	username := c.Param("name")
+	var json model.PasswordChange
+	if err := c.ShouldBindJSON(&json); err != nil {
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	status, err := model.ChangeAccountPassword(username, json.OldPassword, json.NewPassword)
+	if err != nil {
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": string(err.Error())})
+		return
+	}
+
+	if status {
+		c.IndentedJSON(http.StatusOK, gin.H{"message": "User '" + username + "' has changed their password"})
+	} else {
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": "User password could not be updated!"})
+	}
+}
+
 // DeleteUser Remove a user for authentication and authorization
 //
 //	@Summary		Delete user

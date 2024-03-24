@@ -31,6 +31,18 @@ import (
 	"github.com/greeneg/ipmanager/model"
 )
 
+// CreateHost Register a host into the system
+//
+//	@Summary		Register host
+//	@Description	Add a new host
+//	@Tags			host
+//	@Accept			json
+//	@Produce		json
+//	@Param			host	body	model.Host	true	"Host Data"
+//	@Security		BasicAuth
+//	@Success		200	{object}	model.SuccessMsg
+//	@Failure		400	{object}	model.FailureMsg
+//	@Router			/host [post]
 func (i *IpManager) CreateHost(c *gin.Context) {
 	var json model.Host
 	if err := c.ShouldBindJSON(&json); err != nil {
@@ -69,6 +81,18 @@ func (i *IpManager) CreateHost(c *gin.Context) {
 	}
 }
 
+// DeleteHostname Remove a host from the system
+//
+//	@Summary		Delete a host
+//	@Description	Delete a host
+//	@Tags			host
+//	@Accept			json
+//	@Produce		json
+//	@Param			hostname	path	string	true	"Hostname"
+//	@Security		BasicAuth
+//	@Success		200	{object}	model.SuccessMsg
+//	@Failure		400	{object}	model.FailureMsg
+//	@Router			/host/{hostname} [delete]
 func (i *IpManager) DeleteHostname(c *gin.Context) {
 	hostname := c.Param("hostname")
 	status, err := model.DeleteDomain(hostname)
@@ -85,6 +109,50 @@ func (i *IpManager) DeleteHostname(c *gin.Context) {
 	}
 }
 
+// UpdateMacAddresses Update a host's MAC address list
+//
+//	@Summary		Update MAC address list
+//	@Description	Update MAC address list
+//	@Tags			host
+//	@Accept			json
+//	@Produce		json
+//	@Param			hostname	path	string	true	"Hostname"
+//	@Param			updateMacAddresses	body	model.MacAddressList	true	"MAC address list"
+//	@Security		BasicAuth
+//	@Success		200	{object}	model.SuccessMsg
+//	@Failure		400	{object}	model.FailureMsg
+//	@Router			/host/{hostname} [patch]
+func (i *IpManager) UpdateMacAddresses(c *gin.Context) {
+	hostname := c.Param("hostname")
+	var json model.MacAddressList
+	if err := c.ShouldBindJSON(&json); err != nil {
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	status, err := model.UpdateMacAddresses(hostname, json.Data)
+	if err != nil {
+		log.Println("ERROR: Cannot update host's MAC address list: " + string(err.Error()))
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "Unable to update host's MAC address list: " + string(err.Error())})
+		return
+	}
+
+	if status {
+		c.IndentedJSON(http.StatusOK, gin.H{"message": "host " + hostname + "'s MAC address list has been modified"})
+	} else {
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "Unable to update host's MAC address list"})
+	}
+}
+
+// GetHosts Retrieve list of all hosts
+//
+//	@Summary		Retrieve list of all hosts
+//	@Description	Retrieve list of all hosts
+//	@Tags			host
+//	@Produce		json
+//	@Success		200	{object}	model.HostList
+//	@Failure		400	{object}	model.FailureMsg
+//	@Router			/hosts [get]
 func (i *IpManager) GetHosts(c *gin.Context) {
 	hosts, err := model.GetHosts()
 	helpers.CheckError(err)
@@ -96,6 +164,16 @@ func (i *IpManager) GetHosts(c *gin.Context) {
 	}
 }
 
+// GetHostByHostName Retrieve a host by its hostname
+//
+//	@Summary		Retrieve a host by its hostname
+//	@Description	Retrieve a host by its hostname
+//	@Tags			host
+//	@Produce		json
+//	@Param			hostname	path	string	true	"hostname"
+//	@Success		200	{object}	model.Host
+//	@Failure		400	{object}	model.FailureMsg
+//	@Router			/host/name/{hostname} [get]
 func (i *IpManager) GetHostByHostName(c *gin.Context) {
 	host := c.Param("hostname")
 	ent, err := model.GetHostByHostName(host)
@@ -108,6 +186,16 @@ func (i *IpManager) GetHostByHostName(c *gin.Context) {
 	}
 }
 
+// GetHostById Retrieve a host by its Id
+//
+//	@Summary		Retrieve a host by its Id
+//	@Description	Retrieve a host by its Id
+//	@Tags			host
+//	@Produce		json
+//	@Param			hostid	path	string	true	"host Id"
+//	@Success		200	{object}	model.Host
+//	@Failure		400	{object}	model.FailureMsg
+//	@Router			/host/id/{hostid} [get]
 func (i *IpManager) GetHostById(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("hostid"))
 	ent, err := model.GetHostById(id)

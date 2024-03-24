@@ -53,11 +53,38 @@ func DeleteHostname(hostname string) (bool, error) {
 	return true, nil
 }
 
+func UpdateMacAddresses(hostname string, data []string) (bool, error) {
+	t, err := DB.Begin()
+	if err != nil {
+		return false, err
+	}
+	defer DB.Close()
+
+	q, err := t.Prepare("UPDATE Hosts SET MacAddresses = ? WHERE HostName = ?")
+	if err != nil {
+		return false, err
+	}
+
+	macAddressSlice, err := json.Marshal(data)
+	if err != nil {
+		return false, err
+	}
+	_, err = q.Exec(macAddressSlice, hostname)
+	if err != nil {
+		return false, err
+	}
+
+	t.Commit()
+
+	return true, nil
+}
+
 func GetHostById(id int) (Host, error) {
 	rec, err := DB.Prepare("SELECT * FROM Hosts WHERE Id = ?")
 	if err != nil {
 		return Host{}, err
 	}
+	defer DB.Close()
 
 	strHost := StringHost{}
 	err = rec.QueryRow(id).Scan(
@@ -91,6 +118,7 @@ func GetHostByHostName(hostname string) (Host, error) {
 	if err != nil {
 		return Host{}, err
 	}
+	defer DB.Close()
 
 	strHost := StringHost{}
 	err = rec.QueryRow(hostname).Scan(

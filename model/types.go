@@ -100,6 +100,14 @@ type DomainList struct {
 	Data []Domain `json:"data"`
 }
 
+type HostList struct {
+	Data []Host `json:"data"`
+}
+
+type MacAddressList struct {
+	Data []string `json:"data"`
+}
+
 type PasswordChange struct {
 	OldPassword string `json:"oldPassword"`
 	NewPassword string `json:"newPassword"`

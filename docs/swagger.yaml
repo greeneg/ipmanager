@@ -32,6 +32,35 @@ definitions:
       error:
         type: string
     type: object
+  model.Host:
+    properties:
+      CreationDate:
+        type: string
+      CreatorId:
+        type: integer
+      HostName:
+        type: string
+      Id:
+        type: integer
+      MacAddresses:
+        items:
+          type: string
+        type: array
+    type: object
+  model.HostList:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/model.Host'
+        type: array
+    type: object
+  model.MacAddressList:
+    properties:
+      data:
+        items:
+          type: string
+        type: array
+    type: object
   model.PasswordChange:
     properties:
       newPassword:
@@ -214,6 +243,156 @@ paths:
       summary: Retrieve a list of domain
       tags:
       - domain
+  /host:
+    post:
+      consumes:
+      - application/json
+      description: Add a new host
+      parameters:
+      - description: Host Data
+        in: body
+        name: host
+        required: true
+        schema:
+          $ref: '#/definitions/model.Host'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.SuccessMsg'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.FailureMsg'
+      security:
+      - BasicAuth: []
+      summary: Register host
+      tags:
+      - host
+  /host/{hostname}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a host
+      parameters:
+      - description: Hostname
+        in: path
+        name: hostname
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.SuccessMsg'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.FailureMsg'
+      security:
+      - BasicAuth: []
+      summary: Delete a host
+      tags:
+      - host
+    patch:
+      consumes:
+      - application/json
+      description: Update MAC address list
+      parameters:
+      - description: Hostname
+        in: path
+        name: hostname
+        required: true
+        type: string
+      - description: MAC address list
+        in: body
+        name: updateMacAddresses
+        required: true
+        schema:
+          $ref: '#/definitions/model.MacAddressList'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.SuccessMsg'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.FailureMsg'
+      security:
+      - BasicAuth: []
+      summary: Update MAC address list
+      tags:
+      - host
+  /host/id/{hostid}:
+    get:
+      description: Retrieve a host by its Id
+      parameters:
+      - description: host Id
+        in: path
+        name: hostid
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Host'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.FailureMsg'
+      summary: Retrieve a host by its Id
+      tags:
+      - host
+  /host/name/{hostname}:
+    get:
+      description: Retrieve a host by its hostname
+      parameters:
+      - description: hostname
+        in: path
+        name: hostname
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Host'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.FailureMsg'
+      summary: Retrieve a host by its hostname
+      tags:
+      - host
+  /hosts:
+    get:
+      description: Retrieve list of all hosts
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.HostList'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.FailureMsg'
+      summary: Retrieve list of all hosts
+      tags:
+      - host
   /user:
     post:
       consumes:

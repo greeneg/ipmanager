@@ -33,7 +33,6 @@ func getStoredPasswordHash(username string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	defer q.Close()
 
 	passwordHash := ""
 	err = q.QueryRow(username).Scan(
@@ -185,8 +184,6 @@ func DeleteUser(username string) (bool, error) {
 		return false, err
 	}
 
-	defer q.Close()
-
 	_, err = q.Exec(username)
 	if err != nil {
 		return false, err
@@ -202,7 +199,6 @@ func GetUsers() ([]User, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer rows.Close()
 
 	users := make([]User, 0)
 	for rows.Next() {
@@ -229,11 +225,11 @@ func GetUserStatus(username string) (string, error) {
 	if err != nil {
 		return "", err
 	}
+
 	q, err := DB.Prepare("SELECT Status FROM Users WHERE UserName IS ?")
 	if err != nil {
 		return "", err
 	}
-	defer q.Close()
 
 	status := ""
 	err = q.QueryRow(username).Scan(
@@ -255,6 +251,7 @@ func SetUserStatus(username string, j UserStatus) (bool, error) {
 	if err != nil {
 		return false, err
 	}
+
 	q, err := DB.Prepare("UPDATE Users SET Status = ? WHERE UserName = ?")
 	if err != nil {
 		return false, err
@@ -277,5 +274,6 @@ func SetUserStatus(username string, j UserStatus) (bool, error) {
 	log.Println("INFO: SQL result: Rows: " + strconv.Itoa(int(numberOfRows)))
 
 	t.Commit()
+
 	return true, nil
 }

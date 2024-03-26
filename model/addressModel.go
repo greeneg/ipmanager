@@ -141,7 +141,6 @@ func GetAddressesByDomainId(id int) ([]Address, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer rows.Close()
 
 	addresses := make([]Address, 0)
 	for rows.Next() {
@@ -181,7 +180,6 @@ func GetAddressesByDomainName(domainname string) ([]Address, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer rows.Close()
 
 	addresses := make([]Address, 0)
 	for rows.Next() {
@@ -209,7 +207,6 @@ func GetAddressesBySubnetId(id int) ([]Address, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer rows.Close()
 
 	addresses := make([]Address, 0)
 	for rows.Next() {
@@ -249,7 +246,6 @@ func GetAddressesBySubnetName(snetname string) ([]Address, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer rows.Close()
 
 	addresses := make([]Address, 0)
 	for rows.Next() {
@@ -277,7 +273,6 @@ func GetAddresses() ([]Address, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer rows.Close()
 
 	addresses := make([]Address, 0)
 	for rows.Next() {

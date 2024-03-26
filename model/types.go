@@ -113,6 +113,10 @@ type PasswordChange struct {
 	NewPassword string `json:"newPassword"`
 }
 
+type Subnets struct {
+	Data []Subnet `json:"data"`
+}
+
 type UsersList struct {
 	Data []User `json:"data"`
 }

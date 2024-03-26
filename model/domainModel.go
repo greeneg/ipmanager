@@ -52,8 +52,6 @@ func DeleteDomain(domain string) (bool, error) {
 		return false, err
 	}
 
-	defer q.Close()
-
 	_, err = q.Exec(domain)
 	if err != nil {
 		return false, err
@@ -115,7 +113,6 @@ func GetDomains() ([]Domain, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer rows.Close()
 
 	domains := make([]Domain, 0)
 	for rows.Next() {

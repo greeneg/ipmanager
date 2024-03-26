@@ -81,6 +81,32 @@ definitions:
       UserName:
         type: string
     type: object
+  model.Subnet:
+    properties:
+      BitMask:
+        type: integer
+      CreationDate:
+        type: string
+      CreatorId:
+        type: integer
+      DomainId:
+        type: integer
+      GatewayAddress:
+        type: string
+      Id:
+        type: integer
+      NetworkName:
+        type: string
+      NetworkPrefix:
+        type: string
+    type: object
+  model.Subnets:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/model.Subnet'
+        type: array
+    type: object
   model.SuccessMsg:
     properties:
       message:
@@ -393,6 +419,143 @@ paths:
       summary: Retrieve list of all hosts
       tags:
       - host
+  /subnet:
+    post:
+      consumes:
+      - application/json
+      description: Add a new subnet
+      parameters:
+      - description: Subnet Data
+        in: body
+        name: subnet
+        required: true
+        schema:
+          $ref: '#/definitions/model.Subnet'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.SuccessMsg'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.FailureMsg'
+      security:
+      - BasicAuth: []
+      summary: Register subnet
+      tags:
+      - subnet
+  /subnet/id/{subnetname}:
+    get:
+      description: Retrieve a subnet by its Id
+      parameters:
+      - description: Subnet Id
+        in: path
+        name: subnetid
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Subnet'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.FailureMsg'
+      summary: Retrieve a subnet by its Id
+      tags:
+      - subnet
+  /subnet/name/{subnetname}:
+    get:
+      description: Retrieve a subnet by its network name
+      parameters:
+      - description: Subnet name
+        in: path
+        name: subnetname
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Subnet'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.FailureMsg'
+      summary: Retrieve a subnet by its network name
+      tags:
+      - subnet
+  /subnets:
+    get:
+      description: Retrieve list of all subnets
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Subnets'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.FailureMsg'
+      summary: Retrieve list of all subnets
+      tags:
+      - subnet
+  /subnets/domain/id/{domainid}:
+    get:
+      description: Retrieve a list of subnets assigned to a domain Id
+      parameters:
+      - description: Domain name
+        in: path
+        name: domainname
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Subnets'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.FailureMsg'
+      summary: Retrieve a list of subnets assigned to a domain Id
+      tags:
+      - subnet
+  /subnets/domain/name/{domainname}:
+    get:
+      description: Retrieve a list of subnets assigned to a domain name
+      parameters:
+      - description: Domain name
+        in: path
+        name: domainname
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Subnets'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.FailureMsg'
+      summary: Retrieve a list of subnets assigned to a domain name
+      tags:
+      - subnet
   /user:
     post:
       consumes:

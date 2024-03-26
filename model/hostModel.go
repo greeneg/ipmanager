@@ -58,7 +58,6 @@ func UpdateMacAddresses(hostname string, data []string) (bool, error) {
 	if err != nil {
 		return false, err
 	}
-	defer DB.Close()
 
 	q, err := t.Prepare("UPDATE Hosts SET MacAddresses = ? WHERE HostName = ?")
 	if err != nil {
@@ -84,7 +83,6 @@ func GetHostById(id int) (Host, error) {
 	if err != nil {
 		return Host{}, err
 	}
-	defer DB.Close()
 
 	strHost := StringHost{}
 	err = rec.QueryRow(id).Scan(
@@ -118,7 +116,6 @@ func GetHostByHostName(hostname string) (Host, error) {
 	if err != nil {
 		return Host{}, err
 	}
-	defer DB.Close()
 
 	strHost := StringHost{}
 	err = rec.QueryRow(hostname).Scan(
@@ -152,7 +149,6 @@ func GetHosts() ([]Host, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer rows.Close()
 
 	hosts := make([]Host, 0)
 	for rows.Next() {

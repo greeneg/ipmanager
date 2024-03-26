@@ -431,6 +431,217 @@
                 }
             }
         },
+        "/subnet": {
+            "post": {
+                "security": [
+                    {
+                        "BasicAuth": []
+                    }
+                ],
+                "description": "Add a new subnet",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "subnet"
+                ],
+                "summary": "Register subnet",
+                "parameters": [
+                    {
+                        "description": "Subnet Data",
+                        "name": "subnet",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.Subnet"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.SuccessMsg"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/model.FailureMsg"
+                        }
+                    }
+                }
+            }
+        },
+        "/subnet/id/{subnetname}": {
+            "get": {
+                "description": "Retrieve a subnet by its Id",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "subnet"
+                ],
+                "summary": "Retrieve a subnet by its Id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Subnet Id",
+                        "name": "subnetid",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.Subnet"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/model.FailureMsg"
+                        }
+                    }
+                }
+            }
+        },
+        "/subnet/name/{subnetname}": {
+            "get": {
+                "description": "Retrieve a subnet by its network name",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "subnet"
+                ],
+                "summary": "Retrieve a subnet by its network name",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Subnet name",
+                        "name": "subnetname",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.Subnet"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/model.FailureMsg"
+                        }
+                    }
+                }
+            }
+        },
+        "/subnets": {
+            "get": {
+                "description": "Retrieve list of all subnets",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "subnet"
+                ],
+                "summary": "Retrieve list of all subnets",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.Subnets"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/model.FailureMsg"
+                        }
+                    }
+                }
+            }
+        },
+        "/subnets/domain/id/{domainid}": {
+            "get": {
+                "description": "Retrieve a list of subnets assigned to a domain Id",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "subnet"
+                ],
+                "summary": "Retrieve a list of subnets assigned to a domain Id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Domain name",
+                        "name": "domainname",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.Subnets"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/model.FailureMsg"
+                        }
+                    }
+                }
+            }
+        },
+        "/subnets/domain/name/{domainname}": {
+            "get": {
+                "description": "Retrieve a list of subnets assigned to a domain name",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "subnet"
+                ],
+                "summary": "Retrieve a list of subnets assigned to a domain name",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Domain name",
+                        "name": "domainname",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.Subnets"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/model.FailureMsg"
+                        }
+                    }
+                }
+            }
+        },
         "/user": {
             "post": {
                 "security": [
@@ -883,6 +1094,46 @@
                 },
                 "UserName": {
                     "type": "string"
+                }
+            }
+        },
+        "model.Subnet": {
+            "type": "object",
+            "properties": {
+                "BitMask": {
+                    "type": "integer"
+                },
+                "CreationDate": {
+                    "type": "string"
+                },
+                "CreatorId": {
+                    "type": "integer"
+                },
+                "DomainId": {
+                    "type": "integer"
+                },
+                "GatewayAddress": {
+                    "type": "string"
+                },
+                "Id": {
+                    "type": "integer"
+                },
+                "NetworkName": {
+                    "type": "string"
+                },
+                "NetworkPrefix": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.Subnets": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Subnet"
+                    }
                 }
             }
         },

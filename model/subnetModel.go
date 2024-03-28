@@ -122,6 +122,56 @@ func CreateSubnet(s Subnet, id int) (bool, error) {
 	return true, nil
 }
 
+func dropDynamicNetworkTable(subnetName string) (bool, error) {
+	t, err := DB.Begin()
+	if err != nil {
+		return false, err
+	}
+
+	q, err := DB.Prepare("DROP TABLE IF EXISTS " + subnetName)
+	if err != nil {
+		return false, err
+	}
+
+	_, err = q.Exec()
+	if err != nil {
+		return false, err
+	}
+
+	t.Commit()
+
+	return true, nil
+}
+
+func DeleteSubnet(subnetName string) (bool, error) {
+	t, err := DB.Begin()
+	if err != nil {
+		return false, err
+	}
+
+	q, err := DB.Prepare("DELETE FROM Subnets WHERE NetworkName IS ?")
+	if err != nil {
+		return false, err
+	}
+
+	_, err = q.Exec(subnetName)
+	if err != nil {
+		return false, err
+	}
+
+	t.Commit()
+
+	// now drop the network's table
+	log.Println("INFO: Dropping dynamic table '" + subnetName + "'")
+	_, err = dropDynamicNetworkTable(subnetName)
+	if err != nil {
+		// TODO: revert transaction some how if drop fails
+		return false, err
+	}
+
+	return true, nil
+}
+
 func GetSubnetById(id int) (Subnet, error) {
 	rec, err := DB.Prepare("SELECT * FROM Subnets WHERE Id = ?")
 	if err != nil {

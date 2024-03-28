@@ -447,6 +447,33 @@ paths:
       summary: Register subnet
       tags:
       - subnet
+  /subnet/{networkname}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a subnet
+      parameters:
+      - description: Network name
+        in: path
+        name: networkname
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.SuccessMsg'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.FailureMsg'
+      security:
+      - BasicAuth: []
+      summary: Delete subnet
+      tags:
+      - subnet
   /subnet/id/{subnetname}:
     get:
       description: Retrieve a subnet by its Id

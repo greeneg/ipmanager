@@ -1,8 +1,9 @@
 {
 	"info": {
-		"_postman_id": "2289e3fe-fc58-4d2f-9031-92114f20eddc",
+		"_postman_id": "a087ea4d-8832-4dc6-b354-606b61a0a63f",
 		"name": "IpManager",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "4318470"
 	},
 	"item": [
 		{
@@ -20,6 +21,72 @@
 						"api",
 						"v1",
 						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get User by Id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{serviceHost}}/api/v1/user/id/{{Id}}",
+					"protocol": "http",
+					"host": [
+						"{{serviceHost}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"user",
+						"id",
+						"{{Id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get User by Name",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{serviceHost}}/api/v1/user/name/{{username}}",
+					"protocol": "http",
+					"host": [
+						"{{serviceHost}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"user",
+						"name",
+						"{{username}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get User Status",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{serviceHost}}/api/v1/user/{{username}}/status",
+					"protocol": "http",
+					"host": [
+						"{{serviceHost}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"user",
+						"{{username}}",
+						"status"
 					]
 				}
 			},
@@ -164,6 +231,35 @@
 			"response": []
 		},
 		{
+			"name": "Create Subnet",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"NetworkName\": \"WifiNetwork\",\n    \"NetworkPrefix\": \"192.168.86.0\",\n    \"BitMask\": 24,\n    \"GatewayAddress\": \"192.168.86.1\",\n    \"DomainId\": 1,\n    \"CreatorId\": 1\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{serviceHost}}/api/v1/subnet",
+					"protocol": "http",
+					"host": [
+						"{{serviceHost}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"subnet"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Create User",
 			"request": {
 				"method": "POST",
@@ -254,6 +350,118 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Delete Subnet",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://{{serviceHost}}/api/v1/subnet/{{networkName}}",
+					"protocol": "http",
+					"host": [
+						"{{serviceHost}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"subnet",
+						"{{networkName}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Set User Status",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"status\": \"enabled\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{serviceHost}}/api/v1/user/{{username}}/status",
+					"protocol": "http",
+					"host": [
+						"{{serviceHost}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"user",
+						"{{username}}",
+						"status"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Change User Password",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"oldPassword\": \"{{newUserPassword}}\",\n    \"newPassword\": \"{{userPassword}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{serviceHost}}/api/v1/user/{{username}}",
+					"protocol": "http",
+					"host": [
+						"{{serviceHost}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"user",
+						"{{username}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update host MAC addresses",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"data\": [{{macAddresses}}]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{serviceHost}}/api/v1/host/{{hostname}}",
+					"protocol": "http",
+					"host": [
+						"{{serviceHost}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"host",
+						"{{hostname}}"
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"auth": {
@@ -326,6 +534,21 @@
 			"key": "macAddresses",
 			"value": "",
 			"type": "default"
+		},
+		{
+			"key": "Id",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "newUserPassword",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "networkName",
+			"value": "",
+			"type": "string"
 		}
 	]
 }

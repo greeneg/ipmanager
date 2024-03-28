@@ -80,6 +80,35 @@ func (i *IpManager) CreateSubnet(c *gin.Context) {
 	}
 }
 
+// DeleteSubnet Remove a subnet
+//
+//	@Summary		Delete subnet
+//	@Description	Delete a subnet
+//	@Tags			subnet
+//	@Accept			json
+//	@Produce		json
+//	@Param			networkname	path	string	true	"Network name"
+//	@Security		BasicAuth
+//	@Success		200	{object}	model.SuccessMsg
+//	@Failure		400	{object}	model.FailureMsg
+//	@Router			/subnet/{networkname} [delete]
+func (i *IpManager) DeleteSubnet(c *gin.Context) {
+	subnetName := c.Param("networkname")
+	status, err := model.DeleteSubnet(subnetName)
+	if err != nil {
+		log.Println("ERROR: Cannot delete subnet: " + string(err.Error()))
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "Unable to remove subnet! " + string(err.Error())})
+		return
+	}
+
+	if status {
+		c.IndentedJSON(http.StatusOK, gin.H{"message": "Subnet '" + subnetName + "' has been removed from system"})
+	} else {
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "Unable to remove user!"})
+	}
+
+}
+
 // GetSubnets Retrieve list of all subnets
 //
 //	@Summary		Retrieve list of all subnets

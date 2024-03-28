@@ -50,6 +50,23 @@ func CreateHost(h Host, id int) (bool, error) {
 }
 
 func DeleteHostname(hostname string) (bool, error) {
+	t, err := DB.Begin()
+	if err != nil {
+		return false, err
+	}
+
+	q, err := t.Prepare("DELETE FROM Hosts WHERE HostName = ?")
+	if err != nil {
+		return false, err
+	}
+
+	_, err = q.Exec(hostname)
+	if err != nil {
+		return false, err
+	}
+
+	t.Commit()
+
 	return true, nil
 }
 

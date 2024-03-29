@@ -100,6 +100,17 @@ definitions:
       NetworkPrefix:
         type: string
     type: object
+  model.SubnetUpdate:
+    properties:
+      BitMask:
+        type: integer
+      DomainName:
+        type: string
+      GatewayAddress:
+        type: string
+      NetworkPrefix:
+        type: string
+    type: object
   model.Subnets:
     properties:
       data:
@@ -150,8 +161,8 @@ info:
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
-  title: IpManager API
-  version: 0.0.6
+  title: IpManager
+  version: 0.0.8
 paths:
   /domain:
     post:
@@ -472,6 +483,38 @@ paths:
       security:
       - BasicAuth: []
       summary: Delete subnet
+      tags:
+      - subnet
+    patch:
+      consumes:
+      - application/json
+      description: Change subnet network information
+      parameters:
+      - description: Network name
+        in: path
+        name: networkname
+        required: true
+        type: string
+      - description: Subnet data
+        in: body
+        name: subnetUpdate
+        required: true
+        schema:
+          $ref: '#/definitions/model.SubnetUpdate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.SuccessMsg'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.FailureMsg'
+      security:
+      - BasicAuth: []
+      summary: Change subnet network information
       tags:
       - subnet
   /subnet/id/{subnetname}:

@@ -45,8 +45,8 @@ import (
 	"github.com/greeneg/ipmanager/routes"
 )
 
-//	@title			IpManager API
-//	@version		0.0.6
+//	@title			IpManager
+//	@version		0.0.8
 //	@description	A simple API for managing networks
 
 //	@contact.name	Gary Greene
@@ -60,7 +60,7 @@ import (
 //	@host		localhost:8000
 //	@BasePath	/api/v1
 
-// @schemas	http
+// @schemas	http https
 func main() {
 	r := gin.Default()
 	r.SetTrustedProxies(nil)
@@ -104,5 +104,12 @@ func main() {
 	r.GET("/api/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
 	tcpPort := strconv.Itoa(IpManager.ConfStruct.TcpPort)
-	r.Run(":" + tcpPort)
+	tlsTcpPort := strconv.Itoa(IpManager.ConfStruct.TLSTcpPort)
+	tlsPemFile := IpManager.ConfStruct.TLSPemFile
+	tlsKeyFile := IpManager.ConfStruct.TLSKeyFile
+	if IpManager.ConfStruct.UseTLS {
+		r.RunTLS(":"+tlsTcpPort, tlsPemFile, tlsKeyFile)
+	} else {
+		r.Run(":" + tcpPort)
+	}
 }

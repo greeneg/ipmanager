@@ -172,6 +172,93 @@ func DeleteSubnet(subnetName string) (bool, error) {
 	return true, nil
 }
 
+func checkAddressTableInUse(subnetName string) error {
+	t, err := DB.Begin()
+	if err != nil {
+		return err
+	}
+
+	q, err := t.Prepare("SELECT COUNT(*) FROM " + subnetName + " WHERE AssignmentState = 1")
+	if err != nil {
+		return err
+	}
+	var val string
+	err = q.QueryRow().Scan(&val)
+	if err == sql.ErrNoRows {
+		return err
+	} else if err != nil {
+		return err
+	}
+
+	num, err := strconv.Atoi(val)
+	if err != nil {
+		return err
+	}
+	if num != 0 {
+		a := new(AddressTableInUse)
+		return a
+	}
+
+	t.Commit()
+
+	return nil
+}
+
+func ModifySubnet(subnetName string, json SubnetUpdate) (bool, error) {
+	t, err := DB.Begin()
+	if err != nil {
+		return false, err
+	}
+
+	// check if the address table for the network has any entries that are in use. if so, error out with
+	// network in use error
+	err = checkAddressTableInUse(subnetName)
+	if err != nil { // first deal with any errors
+		return false, err
+	}
+
+	q, err := t.Prepare("UPDATE Subnets SET NetworkPrefix =?, BitMask = ?, GatewayAddress = ?, DomainId =? WHERE NetworkName = ?")
+	if err != nil {
+		return false, err
+	}
+
+	// get our needed values from the JSON sent in
+	s := new(SubnetUpdate)
+	s.NetworkPrefix = json.NetworkPrefix
+	s.BitMask = json.BitMask
+	s.GatewayAddress = json.GatewayAddress
+	s.DomainName = json.DomainName
+
+	// get the DomainId from the DomainName
+	d, err := GetDomainByDomainName(s.DomainName)
+	if err != nil {
+		return false, err
+	}
+
+	_, err = q.Exec(s.NetworkPrefix, s.BitMask, s.GatewayAddress, d.Id, subnetName)
+	if err != nil {
+		return false, err
+	}
+
+	// Now that we've updated the prefix, we need to drop the address table and recreate it with the new
+	// settings
+	// first, drop old table
+	_, err = dropDynamicNetworkTable(subnetName)
+	if err != nil {
+		return false, err
+	}
+	// now create the new dynamic table
+	_, err = createDynamicNetworkTable(subnetName, s.NetworkPrefix, s.BitMask)
+	if err != nil {
+		// TODO: revert transaction (somehow) if subnet dynamic table cannot be built
+		return false, err
+	}
+
+	t.Commit()
+
+	return true, nil
+}
+
 func GetSubnetById(id int) (Subnet, error) {
 	rec, err := DB.Prepare("SELECT * FROM Subnets WHERE Id = ?")
 	if err != nil {

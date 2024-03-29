@@ -109,6 +109,41 @@ func (i *IpManager) DeleteSubnet(c *gin.Context) {
 
 }
 
+// ModifySubnet Change a subnet's network information
+//
+//	@Summary		Change subnet network information
+//	@Description	Change subnet network information
+//	@Tags			subnet
+//	@Accept			json
+//	@Produce		json
+//	@Param			networkname	path	string	true	"Network name"
+//	@Param			subnetUpdate	body	model.SubnetUpdate	true	"Subnet data"
+//	@Security		BasicAuth
+//	@Success		200	{object}	model.SuccessMsg
+//	@Failure		400	{object}	model.FailureMsg
+//	@Router			/subnet/{networkname} [patch]
+func (i *IpManager) ModifySubnet(c *gin.Context) {
+	subnetName := c.Param("networkname")
+	var json model.SubnetUpdate
+	if err := c.ShouldBindJSON(&json); err != nil {
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	status, err := model.ModifySubnet(subnetName, json)
+	if err != nil {
+		log.Println("ERROR: Cannot modify subnet '" + subnetName + "'! " + string(err.Error()))
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "Unable to modify subnet '" + subnetName + "'! " + string(err.Error())})
+		return
+	}
+
+	if status {
+		c.IndentedJSON(http.StatusOK, gin.H{})
+	} else {
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{})
+	}
+}
+
 // GetSubnets Retrieve list of all subnets
 //
 //	@Summary		Retrieve list of all subnets

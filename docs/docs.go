@@ -593,6 +593,56 @@ const docTemplate = `{
                         }
                     }
                 }
+            },
+            "patch": {
+                "security": [
+                    {
+                        "BasicAuth": []
+                    }
+                ],
+                "description": "Change subnet network information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "subnet"
+                ],
+                "summary": "Change subnet network information",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Network name",
+                        "name": "networkname",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Subnet data",
+                        "name": "subnetUpdate",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.SubnetUpdate"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.SuccessMsg"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/model.FailureMsg"
+                        }
+                    }
+                }
             }
         },
         "/subnets": {
@@ -1175,6 +1225,23 @@ const docTemplate = `{
                 }
             }
         },
+        "model.SubnetUpdate": {
+            "type": "object",
+            "properties": {
+                "BitMask": {
+                    "type": "integer"
+                },
+                "DomainName": {
+                    "type": "string"
+                },
+                "GatewayAddress": {
+                    "type": "string"
+                },
+                "NetworkPrefix": {
+                    "type": "string"
+                }
+            }
+        },
         "model.Subnets": {
             "type": "object",
             "properties": {
@@ -1249,11 +1316,11 @@ const docTemplate = `{
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
-	Version:          "0.0.6",
+	Version:          "0.0.8",
 	Host:             "localhost:8000",
 	BasePath:         "/api/v1",
 	Schemes:          []string{},
-	Title:            "IpManager API",
+	Title:            "IpManager",
 	Description:      "A simple API for managing networks",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,

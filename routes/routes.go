@@ -73,7 +73,7 @@ func PrivateRoutes(g *gin.RouterGroup, i *controllers.IpManager) {
 	g.DELETE("/host/:hostname", i.DeleteHostname)    // trash a host
 	// subnet related routes
 	g.POST("/subnet", i.CreateSubnet)                // create new subnet
-	g.PATCH("/subnet/:networkname")                  // update a subnet's network information
+	g.PATCH("/subnet/:networkname", i.ModifySubnet)  // update a subnet's network information
 	g.DELETE("/subnet/:networkname", i.DeleteSubnet) // trash a subnet
 	// user related routes
 	g.POST("/user", i.CreateUser)                   // create new user

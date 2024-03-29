@@ -2,7 +2,7 @@
     "swagger": "2.0",
     "info": {
         "description": "A simple API for managing networks",
-        "title": "IpManager API",
+        "title": "IpManager",
         "contact": {
             "name": "Gary Greene",
             "url": "https://github.com/greeneg/ipmanager"
@@ -11,7 +11,7 @@
             "name": "Apache 2.0",
             "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
         },
-        "version": "0.0.6"
+        "version": "0.0.8"
     },
     "host": "localhost:8000",
     "basePath": "/api/v1",
@@ -571,6 +571,56 @@
                         "name": "networkname",
                         "in": "path",
                         "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.SuccessMsg"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/model.FailureMsg"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "security": [
+                    {
+                        "BasicAuth": []
+                    }
+                ],
+                "description": "Change subnet network information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "subnet"
+                ],
+                "summary": "Change subnet network information",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Network name",
+                        "name": "networkname",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Subnet data",
+                        "name": "subnetUpdate",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.SubnetUpdate"
+                        }
                     }
                 ],
                 "responses": {
@@ -1162,6 +1212,23 @@
                     "type": "integer"
                 },
                 "NetworkName": {
+                    "type": "string"
+                },
+                "NetworkPrefix": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.SubnetUpdate": {
+            "type": "object",
+            "properties": {
+                "BitMask": {
+                    "type": "integer"
+                },
+                "DomainName": {
+                    "type": "string"
+                },
+                "GatewayAddress": {
                     "type": "string"
                 },
                 "NetworkPrefix": {

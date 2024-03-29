@@ -71,6 +71,13 @@ type User struct {
 	LastChangedDate string `json:"LastChangedDate"`
 }
 
+type SubnetUpdate struct {
+	NetworkPrefix  string `json:"NetworkPrefix"`
+	BitMask        int    `json:"BitMask"`
+	GatewayAddress string `json:"GatewayAddress"`
+	DomainName     string `json:"DomainName"`
+}
+
 type ProposedUser struct {
 	Id           int    `json:"Id"`
 	UserName     string `json:"UserName"`

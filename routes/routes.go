@@ -26,34 +26,34 @@ import (
 
 func PublicRoutes(g *gin.RouterGroup, i *controllers.IpManager) {
 	// address related routes
-	g.GET("/address/:id", i.GetAddressById)
-	g.GET("/address/host/id/:hostid", i.GetAddressByHostNameId)
-	g.GET("/address/host/name/:hostname", i.GetAddressByHostName)
-	g.GET("/address/ip/:ip", i.GetAddressByIpAddress)
-	g.GET("/addresses", i.GetAddresses)
-	g.GET("/addresses/domain/id/:domainid", i.GetAddressesByDomainId)
-	g.GET("/addresses/domain/name/:domainname", i.GetAddressesByDomainName)
-	g.GET("/addresses/subnet/id/:subnetid", i.GetAddressesBySubnetId)
-	g.GET("/addresses/subnet/name/:subnetname", i.GetAddressesBySubnetName)
-	g.GET("/addresses/subnet/name/:subnetname/unassigned")
+	g.GET("/address/:id", i.GetAddressById)                                 // get an addresses details by id
+	g.GET("/address/host/id/:hostid", i.GetAddressByHostNameId)             // get address by host's id
+	g.GET("/address/host/name/:hostname", i.GetAddressByHostName)           // get address by the hosts name
+	g.GET("/address/ip/:ip", i.GetAddressByIpAddress)                       // get the address details by the IP address
+	g.GET("/addresses", i.GetAddresses)                                     // get all addresses
+	g.GET("/addresses/domain/id/:domainid", i.GetAddressesByDomainId)       // get all addresses by domain id
+	g.GET("/addresses/domain/name/:domainname", i.GetAddressesByDomainName) // get all addresses by domain name
+	g.GET("/addresses/subnet/id/:subnetid", i.GetAddressesBySubnetId)       // get all addresses from the subnet id
+	g.GET("/addresses/subnet/name/:subnetname", i.GetAddressesBySubnetName) // get all addresses by the subnet name
+	g.GET("/addresses/subnet/name/:subnetname/unassigned")                  // get all unassigned addresses
 	// domain related routes
-	g.GET("/domain/id/:domainid", i.GetDomainById)
-	g.GET("/domain/name/:domainname", i.GetDomainByDomainName)
-	g.GET("/domains", i.GetDomains)
+	g.GET("/domain/id/:domainid", i.GetDomainById)             // get the domain by id
+	g.GET("/domain/name/:domainname", i.GetDomainByDomainName) // get the domain by its domain name
+	g.GET("/domains", i.GetDomains)                            // get all domains
 	// host related routes
-	g.GET("/host/id/:hostid", i.GetHostById)
-	g.GET("/host/name/:hostname", i.GetHostByHostName)
-	g.GET("/hosts", i.GetHosts)
+	g.GET("/host/id/:hostid", i.GetHostById)           // get a host's details by its host id
+	g.GET("/host/name/:hostname", i.GetHostByHostName) // get a host's details by its host name
+	g.GET("/hosts", i.GetHosts)                        // get all hosts
 	// subnet related routes
-	g.GET("/subnet/id/:subnetid", i.GetSubnetById)
-	g.GET("/subnet/name/:subnetname", i.GetSubnetByNetworkName)
-	g.GET("/subnets", i.GetSubnets)
-	g.GET("/subnets/domain/id/:domainid", i.GetSubnetsByDomainId)
-	g.GET("/subnets/domain/name/:domainname", i.GetSubnetsByDomainName)
+	g.GET("/subnet/id/:subnetid", i.GetSubnetById)                      // get a subnet by its id
+	g.GET("/subnet/name/:subnetname", i.GetSubnetByNetworkName)         // get a subnet by its name
+	g.GET("/subnets", i.GetSubnets)                                     // get all subnets
+	g.GET("/subnets/domain/id/:domainid", i.GetSubnetsByDomainId)       // get all subnets by domain id
+	g.GET("/subnets/domain/name/:domainname", i.GetSubnetsByDomainName) // get all subnets by domain name
 	// user related routes
-	g.GET("/user/id/:id", i.GetUserById)
-	g.GET("/user/name/:name", i.GetUserByUserName)
-	g.GET("/users", i.GetUsers)
+	g.GET("/user/id/:id", i.GetUserById)           // get a user by id
+	g.GET("/user/name/:name", i.GetUserByUserName) // get a user by name
+	g.GET("/users", i.GetUsers)                    // get all users
 	// service related routes
 	g.OPTIONS("/")   // API options
 	g.GET("/health") // service health
